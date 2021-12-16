@@ -27,11 +27,11 @@ void CChessGame::init()
     // create player pieces
     memset(m_pPieces, 0, sizeof(m_pPieces));
     createPieces(White, m_pPieces);
-    createPieces(Black, m_pPieces + 16);
+    createPieces(Black, m_pPieces + PLAYER_PIECE_NUM);
 
     // reposition both players' pieces to original positions
     resetPlayerPiece(White, m_pPieces);
-    resetPlayerPiece(Black, m_pPieces + 16);
+    resetPlayerPiece(Black, m_pPieces + PLAYER_PIECE_NUM);
 
     m_MoveLog.clear();
 }

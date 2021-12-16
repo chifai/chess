@@ -44,7 +44,7 @@ private:
     void createPieces(const ETeam Team, const CPiece **pStartPiece);
 
     // reset particular player pieces
-    void resetPlayerPiece(const ETeam Teamc, const CPiece **m_pPieces);
+    void resetPlayerPiece(const ETeam Team, const CPiece **m_pPieces);
 
     // update all pieces location to m_pSquare
     void updatePieceLocation();

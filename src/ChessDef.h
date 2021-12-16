@@ -4,6 +4,7 @@
 //#include "Pawn.h"
 
 namespace Chess {
+    const int PLAYER_PIECE_NUM = 16;
     const int PIECE_NUM = 32;
     const int BOARD_SIZE = 8;
     const int SQUARE_NUM = BOARD_SIZE * BOARD_SIZE;
