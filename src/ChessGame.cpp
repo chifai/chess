@@ -18,9 +18,6 @@ CChessGame::~CChessGame()
 
 void CChessGame::init()
 {
-    // init as nullptr array
-    memset(m_pSquare, 0, sizeof(m_pSquare));
-
     // reset the state as ongoing
     m_GameState = Ongoing;
 
@@ -30,6 +27,7 @@ void CChessGame::init()
     createPieces(Black, m_pPieces + PLAYER_PIECE_NUM);
 
     // reposition both players' pieces to original positions
+    memset(m_pSquare, 0, sizeof(m_pSquare));
     resetPlayerPiece(White, m_pPieces);
     resetPlayerPiece(Black, m_pPieces + PLAYER_PIECE_NUM);
 
