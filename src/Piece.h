@@ -9,23 +9,19 @@ class CPiece
 {
 public:
     // constructor
-    CPiece();
+    CPiece(const ETeam Team);
+
+    // return the team
+    ETeam getTeam() const;
 
     // destructor
     virtual ~CPiece();
-
-    // init the piece with team and position
-    void init(const ETeam Team, const TPosition &Pos);
-
-    // return position
-    const TPosition &getPosition() const;
 
     // return the type of the piece
     virtual EType getType() const = 0;
 
 private:
-    TPosition m_Position;
-
+    // team
     ETeam m_Team;
 };
 #endif // !defined(_PIECE_H__INCLUDED_)

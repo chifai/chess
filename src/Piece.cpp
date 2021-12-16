@@ -1,20 +1,15 @@
 #include "Piece.h"
 
-CPiece::CPiece()
+CPiece::CPiece(const ETeam Team)
 {
+    m_Team = Team;
+}
+
+ETeam CPiece::getTeam() const
+{
+    return m_Team;
 }
 
 CPiece::~CPiece()
 {
-}
-
-void CPiece::init(const ETeam Team, const TPosition &Pos)
-{
-    m_Team = Team;
-    m_Position = Pos;
-}
-
-const TPosition &CPiece::getPosition() const
-{
-    return m_Position;
 }

@@ -1,6 +1,6 @@
 #include "Queen.h"
 
-CQueen::CQueen()
+CQueen::CQueen(const ETeam Team) : CPiece(Team)
 {
 }
 

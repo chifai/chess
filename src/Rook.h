@@ -7,7 +7,7 @@ class CRook : public CPiece
 {
 public:
     // constructor
-    CRook();
+    CRook(const ETeam Team);
 
     // destructor
     virtual ~CRook();

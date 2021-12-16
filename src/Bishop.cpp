@@ -1,6 +1,6 @@
 #include "Bishop.h"
 
-CBishop::CBishop()
+CBishop::CBishop(const ETeam Team) : CPiece(Team)
 {
 }
 

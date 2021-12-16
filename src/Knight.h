@@ -7,7 +7,7 @@ class CKnight : public CPiece
 {
 public:
     // constructor
-    CKnight();
+    CKnight(const ETeam Team);
 
     // destructor
     ~CKnight();

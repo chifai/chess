@@ -1,6 +1,6 @@
 #include "Pawn.h"
 
-CPawn::CPawn()
+CPawn::CPawn(const ETeam Team) : CPiece(Team)
 {
 }
 

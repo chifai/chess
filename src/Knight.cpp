@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-CKnight::CKnight()
+CKnight::CKnight(const ETeam Team) : CPiece(Team)
 {
 }
 

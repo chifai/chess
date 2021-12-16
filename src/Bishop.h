@@ -7,7 +7,7 @@ class CBishop : public CPiece
 {
 public:
     // constructor
-    CBishop();
+    CBishop(const ETeam Team);
 
     // destructor
     ~CBishop();

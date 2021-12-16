@@ -1,6 +1,6 @@
 #include "Rook.h"
 
-CRook::CRook()
+CRook::CRook(const ETeam Team) : CPiece(Team)
 {
 }
 

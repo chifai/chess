@@ -7,7 +7,7 @@ class CPawn : public CPiece
 {
 public:
     // constructor
-    CPawn();
+    CPawn(const ETeam Team);
 
     // destructor
     ~CPawn();

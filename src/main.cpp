@@ -20,7 +20,7 @@ void printBoard(const CChessGame &Game)
 {
     TPosition Pos;
     const CPiece *pPiece = nullptr;
-    for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = BOARD_SIZE - 1; i >= 0; i--) {
         printf("| ");
         for (int j = 0; j < BOARD_SIZE; j++) {
             Pos.x = i;
@@ -37,8 +37,16 @@ void printBoard(const CChessGame &Game)
 void printPieceName(const CPiece *pPiece)
 {
     if (pPiece == nullptr) {
-        printf("----  ");
+        printf("----    ");
         return;
+    }
+
+    // print team
+    if (pPiece->getTeam() == White) {
+        printf("W.");
+    }
+    else {
+        printf("B.");
     }
 
     EType PieceType = pPiece->getType();

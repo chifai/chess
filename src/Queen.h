@@ -7,7 +7,7 @@ class CQueen : public CPiece
 {
 public:
     // constructor
-    CQueen();
+    CQueen(const ETeam Team);
 
     // destructor
     ~CQueen();

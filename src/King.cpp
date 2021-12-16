@@ -1,6 +1,6 @@
 #include "King.h"
 
-CKing::CKing()
+CKing::CKing(const ETeam Team) : CPiece(Team)
 {
 }
 

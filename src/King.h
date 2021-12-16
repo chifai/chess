@@ -7,7 +7,7 @@ class CKing : public CPiece
 {
 public:
     // constructor
-    CKing();
+    CKing(const ETeam Team);
 
     // destructor
     ~CKing();

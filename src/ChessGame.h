@@ -40,20 +40,14 @@ public:
     bool isCheckmate() const;
 
 private:
+    // create 16 pieces of a team
+    void createPieces(const ETeam Team, const CPiece **pStartPiece);
+
     // reset particular player pieces
-    void repositionPlayerPiece(const ETeam Team);
+    void resetPlayerPiece(const ETeam Teamc, const CPiece **m_pPieces);
 
     // update all pieces location to m_pSquare
     void updatePieceLocation();
-
-    struct TPlayer {
-        CPawn Pawn[PAWN_NUM];
-        CKnight Knight[KNIGHT_NUM];
-        CBishop Bishop[BISHOP_NUM];
-        CRook Rook[ROOK_NUM];
-        CQueen Queen;
-        CKing King;
-    };
 
     // 64 squares to hold pieces
     const CPiece *m_pSquare[BOARD_SIZE][BOARD_SIZE];
@@ -61,19 +55,11 @@ private:
     // current game state
     EGameState m_GameState;
 
-    // player white
-    TPlayer m_PlayerWhite;
-
-    // player black
-    TPlayer m_PlayerBlack;
-
     // pieces array
-    CPiece *m_pPieces;
+    const CPiece *m_pPieces[PIECE_NUM];
 
     // every move log
     std::vector <TMoveLog> m_MoveLog;
 
-    // position to piece map
-    std::map <TPosition, CPiece*> m_PieceMap;
 };
 #endif // !defined(_CHESSGAME_H__INCLUDED_)
