@@ -40,19 +40,17 @@ namespace Chess {
     };
 
     enum EGameState {
-        Ongoing = 0,
-        WhiteCheck,
-        BlackCheck,
-        WhiteCheckmate,
-        BlackCheckmate,
-        Stalemate,
-    };
-
-    enum EMoveState {
         WhiteMove = 0,
         WhitePromote,
+        WhiteSaveTheKing,
+        WhiteCheckmate,
         BlackMove,
-        BlackPromte,
+        BlackPromote,
+        BlackSaveTheKing,
+        BlackCheck,
+        BlackCheckmate,
+        DrawByStalemate,
+        DrawByFiftyMoveRule,
     };
 
     struct TMoveLog {
