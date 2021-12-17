@@ -54,9 +54,6 @@ private:
     // current game state
     EGameState m_GameState;
 
-    // current move state
-    EMoveState m_MoveState;
-
     // pieces array
     const CPiece *m_pPieces[PIECE_NUM];
 
