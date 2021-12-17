@@ -1,8 +1,6 @@
 #if !defined(_CHESSDEF_H__INCLUDED_)
 #define _CHESSDEF_H__INCLUDED_
 
-//#include "Pawn.h"
-
 namespace Chess {
     const int PLAYER_PIECE_NUM = 16;
     const int PIECE_NUM = 32;
@@ -18,6 +16,11 @@ namespace Chess {
     struct TPosition {
         int x;
         int y;
+
+        bool operator<(const TPosition &rhs) const
+        {
+            return (x * BOARD_SIZE + y < rhs.x * BOARD_SIZE + rhs.y);
+        }
     };
 
     enum ETeam {
@@ -43,6 +46,13 @@ namespace Chess {
         WhiteCheckmate,
         BlackCheckmate,
         Stalemate,
+    };
+
+    enum EMoveState {
+        WhiteMove = 0,
+        WhitePromote,
+        BlackMove,
+        BlackPromte,
     };
 
     struct TMoveLog {

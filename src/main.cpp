@@ -13,6 +13,8 @@ int main()
     CChessGame Game;
     printf("Game Start\n");
     printBoard(Game);
+
+    Game.isValidMove({1, 0}, {2, 0});
     return 0;
 }
 

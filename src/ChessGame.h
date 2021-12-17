@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+typedef std::map <TPosition, const CPiece *> TPieceMap;
+
 class CChessGame
 {
 public:
@@ -22,7 +24,7 @@ public:
     bool isValidMove(const TPosition &From, const TPosition &To) const;
 
     // show all valid move on particular piece, return the numbers
-    int showAllValidMoves(const TPosition &From, TPosition AllValidDest[] ) const;
+    int showAllValidMoves(const TPosition &From, TPosition AllValidDest[]) const;
 
     // move a piece
     bool move(const TPosition &From, const TPosition &To);
@@ -46,20 +48,23 @@ private:
     // reset particular player pieces
     void resetPlayerPiece(const ETeam Team, const CPiece **m_pPieces);
 
-    // update all pieces location to m_pSquare
+    // update all pieces location to m_pPiecePos
     void updatePieceLocation();
-
-    // 64 squares to hold pieces
-    const CPiece *m_pSquare[BOARD_SIZE][BOARD_SIZE];
 
     // current game state
     EGameState m_GameState;
+
+    // current move state
+    EMoveState m_MoveState;
 
     // pieces array
     const CPiece *m_pPieces[PIECE_NUM];
 
     // every move log
     std::vector <TMoveLog> m_MoveLog;
+
+    // TPosition to CPiece* map
+    TPieceMap m_PieceMap;
 
 };
 #endif // !defined(_CHESSGAME_H__INCLUDED_)

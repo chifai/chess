@@ -21,25 +21,47 @@ void CChessGame::init()
     // reset the state as ongoing
     m_GameState = Ongoing;
 
+    // reset move state: white to move
+    m_MoveState = WhiteMove;
+
+    CPiece::setBoard(&m_PieceMap);
+
+    // set piece map to null
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            TPosition Pos = {i, j};
+            m_PieceMap.emplace(Pos, nullptr);
+        }
+    }
+
     // create player pieces
     memset(m_pPieces, 0, sizeof(m_pPieces));
     createPieces(White, m_pPieces);
     createPieces(Black, m_pPieces + PLAYER_PIECE_NUM);
 
     // reposition both players' pieces to original positions
-    memset(m_pSquare, 0, sizeof(m_pSquare));
     resetPlayerPiece(White, m_pPieces);
     resetPlayerPiece(Black, m_pPieces + PLAYER_PIECE_NUM);
 
+    // clear move log
     m_MoveLog.clear();
+
 }
 
 bool CChessGame::isValidMove(const TPosition &From, const TPosition &To) const
 {
-    // get piece object
+    const CPiece *pFromPiece = m_PieceMap.at(From);
 
-    // check if valid
-    return false;
+    // piece exists
+    if (pFromPiece == nullptr) return false;
+
+    // check piece team matches with move state
+    const ETeam FromTeam = pFromPiece->getTeam();
+    if ((FromTeam == White) && (m_MoveState != WhiteMove)) return false;
+    if ((FromTeam == Black) && (m_MoveState != BlackMove)) return false;
+
+    // call piece function to check if valid
+    return pFromPiece->isValidMove(From, To);
 }
 
 bool CChessGame::move(const TPosition &From, const TPosition &To)
@@ -49,7 +71,7 @@ bool CChessGame::move(const TPosition &From, const TPosition &To)
 
 const CPiece *CChessGame::getPiece(const TPosition &Pos) const
 {
-    return m_pSquare[Pos.x][Pos.y];
+    return m_PieceMap.at(Pos);
 }
 
 void CChessGame::createPieces(const ETeam Team, const CPiece **pStartPiece)
@@ -93,19 +115,16 @@ void CChessGame::resetPlayerPiece(const ETeam Team, const CPiece **m_pPieces)
     int nPieceCount = 0;
     // first 8 pawns
     for (int i = 0; i < PAWN_NUM; i++) {
-        m_pSquare[PawnRow][i] = m_pPieces[i];
-        nPieceCount++;
+        TPosition Pos = {PawnRow, i};
+        m_PieceMap[Pos] = m_pPieces[nPieceCount++];
     }
 
+    // for rest of the pieces
     // in order of Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook
-    m_pSquare[OtherPieceRow][0] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][1] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][2] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][3] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][4] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][5] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][6] = m_pPieces[nPieceCount++];
-    m_pSquare[OtherPieceRow][7] = m_pPieces[nPieceCount++];
+    for (int i = 0; i < 8; i++) {
+        TPosition Pos = {OtherPieceRow, i};
+        m_PieceMap[Pos] = m_pPieces[nPieceCount++];
+    }
 }
 
 void CChessGame::updatePieceLocation() 

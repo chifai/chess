@@ -12,3 +12,9 @@ EType CRook::getType() const
 {
     return Rook;
 }
+
+bool CRook::isValidMove(const TPosition &From, const TPosition &To) const
+{
+    
+    return false;
+}
