@@ -4,9 +4,9 @@
 #include "Pawn.h"
 #include "ChessGame.h"
 
-
-void printPieceName(const CPiece *pPiece);
+bool askValidMove(const CChessGame &Game);
 void printBoard(const CChessGame &Game);
+void printPieceName(const CPiece *pPiece);
 
 int main()
 {
@@ -14,8 +14,30 @@ int main()
     printf("Game Start\n");
     printBoard(Game);
 
-    Game.isValidMove({1, 0}, {2, 0});
+    while(askValidMove(Game) == true) {}
     return 0;
+}
+
+bool askValidMove(const CChessGame &Game)
+{
+    TPosition From, To;
+    int nValidScanNum;
+    printf("Enter From Pos: (x,y), or nothing for quit\n");
+    nValidScanNum = scanf("%d,%d", &From.x, &From.y);
+    if (nValidScanNum != 2) {
+        printf("Quit\n");
+        return false;
+    }
+
+    printf("Enter To Pos: (x,y), or nothing for quit\n");
+    nValidScanNum = scanf("%d,%d", &To.x, &To.y);
+    if (nValidScanNum != 2) {
+        printf("Quit\n");
+        return false;
+    }
+
+    printf("Move from (%d, %d) to (%d, %d): %d\n\n", From.x, From.y, To.x, To.y, Game.isValidMove(From, To));
+    return true;
 }
 
 void printBoard(const CChessGame &Game)
