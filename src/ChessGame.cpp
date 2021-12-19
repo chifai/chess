@@ -38,7 +38,7 @@ bool CChessGame::isValidMove(const TPosition &From, const TPosition &To) const
 
 bool CChessGame::move(const TPosition &From, const TPosition &To)
 {
-    const CPiece *pFromPiece = m_PieceMap.at(From);
+    const CPiece *pFromPiece = m_GameBoard[From];
 
     // piece exists
     if (pFromPiece == nullptr) return false;
@@ -48,7 +48,8 @@ bool CChessGame::move(const TPosition &From, const TPosition &To)
     if ((FromTeam == White) && (m_GameState != WhiteMove)) return false;
     if ((FromTeam == Black) && (m_GameState != BlackMove)) return false;
 
-    return false;
+    // call piece function to check if valid
+    return pFromPiece->isValidMove(From, To);
 }
 
 const CPiece *CChessGame::getPiece(const TPosition &Pos) const

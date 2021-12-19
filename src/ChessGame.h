@@ -46,9 +46,6 @@ private:
     // current game state
     EGameState m_GameState;
 
-    // pieces array
-    const CPiece *m_pPieces[PIECE_NUM];
-
     // every move log
     std::vector <TMoveLog> m_MoveLog;
 
