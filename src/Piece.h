@@ -21,6 +21,15 @@ public:
     // destructor
     virtual ~CPiece();
 
+    // set position
+    void setPos(const TPosition &Pos);
+
+    // get position
+    const TPosition &getPos() const;
+
+    // is alive
+    bool isAlive() const;
+
     // return the type of the piece
     virtual EType getType() const = 0;
 
@@ -30,6 +39,12 @@ public:
 protected:
     // team
     ETeam m_Team;
+
+    // alive status
+    bool m_bAlive;
+
+    // position, if alive==false, then save the last position
+    TPosition m_Pos;
 
     // 64 position to hold pieces;
     static std::map <TPosition, const CPiece *> *m_pPieceMap;
