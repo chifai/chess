@@ -41,6 +41,11 @@ const TPosition& CPiece::getPos() const
     return m_Pos;
 }
 
+void CPiece::setAlive(const bool bAlive)
+{
+    m_bAlive = bAlive;
+}
+
 bool CPiece::isAlive() const
 {
     return m_bAlive;

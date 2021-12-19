@@ -28,6 +28,9 @@ public:
     // get position
     const TPosition &getPos() const;
 
+    // set alive status
+    void setAlive(const bool bAlive);
+
     // is alive
     bool isAlive() const;
 
