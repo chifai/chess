@@ -43,29 +43,14 @@ public:
     bool isCheckmate() const;
 
 private:
-    // create 16 pieces of a team
-    void createPieces(const ETeam Team, const CPiece **pStartPiece);
-
-    // reset particular player pieces
-    void resetPlayerPiece(const ETeam Team, const CPiece **m_pPieces);
-
-    // update all pieces location to m_pPiecePos
-    void updatePieceLocation();
-
     // current game state
     EGameState m_GameState;
 
     // current move state
     EMoveState m_MoveState;
 
-    // pieces array
-    const CPiece *m_pPieces[PIECE_NUM];
-
     // every move log
     std::vector <TMoveLog> m_MoveLog;
-
-    // TPosition to CPiece* map
-    TPieceMap m_PieceMap;
 
     // CGameBoard object to manipulate piece position and status
     CGameBoard m_GameBoard;

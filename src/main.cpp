@@ -14,7 +14,7 @@ int main()
     printf("Game Start\n");
     printBoard(Game);
 
-    // while(askValidMove(Game) == true) {}
+    while(askValidMove(Game) == true) {}
     return 0;
 }
 

@@ -11,9 +11,6 @@ CChessGame::CChessGame()
 
 CChessGame::~CChessGame()
 {
-    for(int i = 0; i < PIECE_NUM; i++) {
-        delete m_pPieces[i];
-    }
 }
 
 void CChessGame::init()
@@ -26,23 +23,6 @@ void CChessGame::init()
 
     CPiece::setBoard(&m_GameBoard);
 
-    // set piece map to null
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            TPosition Pos = {i, j};
-            m_PieceMap.emplace(Pos, nullptr);
-        }
-    }
-
-    // create player pieces
-    memset(m_pPieces, 0, sizeof(m_pPieces));
-    createPieces(White, m_pPieces);
-    createPieces(Black, m_pPieces + PLAYER_PIECE_NUM);
-
-    // reposition both players' pieces to original positions
-    resetPlayerPiece(White, m_pPieces);
-    resetPlayerPiece(Black, m_pPieces + PLAYER_PIECE_NUM);
-
     // clear move log
     m_MoveLog.clear();
 
@@ -50,7 +30,7 @@ void CChessGame::init()
 
 bool CChessGame::isValidMove(const TPosition &From, const TPosition &To) const
 {
-    const CPiece *pFromPiece = m_PieceMap.at(From);
+    const CPiece *pFromPiece = m_GameBoard[From];
 
     // piece exists
     if (pFromPiece == nullptr) return false;
@@ -72,61 +52,4 @@ bool CChessGame::move(const TPosition &From, const TPosition &To)
 const CPiece *CChessGame::getPiece(const TPosition &Pos) const
 {
     return m_GameBoard[Pos];
-}
-
-void CChessGame::createPieces(const ETeam Team, const CPiece **pStartPiece)
-{
-    int nPieceNum = 0;
-
-    // create 8 pawns
-    for (int i = 0; i < PAWN_NUM; i++ ) {
-        pStartPiece[nPieceNum++] = new CPawn(Team);
-    }
-
-    // create in order of Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook
-    pStartPiece[nPieceNum++] = new CRook(Team);
-    pStartPiece[nPieceNum++] = new CKnight(Team);
-    pStartPiece[nPieceNum++] = new CBishop(Team);
-    pStartPiece[nPieceNum++] = new CQueen(Team);
-    pStartPiece[nPieceNum++] = new CKing(Team);
-    pStartPiece[nPieceNum++] = new CBishop(Team);
-    pStartPiece[nPieceNum++] = new CKnight(Team);
-    pStartPiece[nPieceNum++] = new CRook(Team);
-}
-
-void CChessGame::resetPlayerPiece(const ETeam Team, const CPiece **m_pPieces)
-{
-    int PawnRow;
-    int OtherPieceRow;
-
-    // assign the row number
-    if (Team == White) {
-        OtherPieceRow = 0;
-        PawnRow = 1;
-    }
-    else if (Team == Black) {
-        OtherPieceRow = 7;
-        PawnRow = 6;
-    }
-    else {
-        assert( false );
-    }
-
-    int nPieceCount = 0;
-    // first 8 pawns
-    for (int i = 0; i < PAWN_NUM; i++) {
-        TPosition Pos = {PawnRow, i};
-        m_PieceMap[Pos] = m_pPieces[nPieceCount++];
-    }
-
-    // for rest of the pieces
-    // in order of Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook
-    for (int i = 0; i < 8; i++) {
-        TPosition Pos = {OtherPieceRow, i};
-        m_PieceMap[Pos] = m_pPieces[nPieceCount++];
-    }
-}
-
-void CChessGame::updatePieceLocation() 
-{
 }
