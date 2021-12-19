@@ -2,6 +2,7 @@
 #define _CHESSGAME_H__INCLUDED_
 
 #include "_Chess.h"
+#include "GameBoard.h"
 
 #include <vector>
 #include <map>
@@ -65,6 +66,9 @@ private:
 
     // TPosition to CPiece* map
     TPieceMap m_PieceMap;
+
+    // CGameBoard object to manipulate piece position and status
+    CGameBoard m_GameBoard;
 
 };
 #endif // !defined(_CHESSGAME_H__INCLUDED_)

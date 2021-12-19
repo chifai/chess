@@ -71,7 +71,7 @@ bool CChessGame::move(const TPosition &From, const TPosition &To)
 
 const CPiece *CChessGame::getPiece(const TPosition &Pos) const
 {
-    return m_PieceMap.at(Pos);
+    return m_GameBoard[Pos];
 }
 
 void CChessGame::createPieces(const ETeam Team, const CPiece **pStartPiece)
