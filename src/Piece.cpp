@@ -1,7 +1,8 @@
-#include "Piece.h"
 #include <cassert>
+#include "GameBoard.h"
+#include "Piece.h"
 
-std::map <TPosition, const CPiece *> *CPiece::m_pPieceMap = nullptr;
+const CGameBoard *CPiece::m_pGameBoard = nullptr;
 
 #define UNDEF_POS   ( -1 )
 
@@ -18,9 +19,9 @@ ETeam CPiece::getTeam() const
     return m_Team;
 }
 
-void CPiece::setBoard(std::map <TPosition, const CPiece *> *pPieceMap)
+void CPiece::setBoard(const CGameBoard *pGameBoard)
 {
-    m_pPieceMap = pPieceMap;
+    m_pGameBoard = pGameBoard;
 }
 
 CPiece::~CPiece()

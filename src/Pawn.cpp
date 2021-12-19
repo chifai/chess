@@ -1,6 +1,7 @@
-#include "Pawn.h"
 #include <cassert>
 #include <cmath>
+#include "GameBoard.h"
+#include "Pawn.h"
 
 CPawn::CPawn(const ETeam Team) : CPiece(Team)
 {
@@ -19,8 +20,8 @@ EType CPawn::getType() const
 bool CPawn::isValidMove(const TPosition &From, const TPosition &To) const
 {
     // check type
-    const CPiece *pFrom = m_pPieceMap->at(From);
-    const CPiece *pTo = m_pPieceMap->at(To);
+    const CPiece *pFrom = (*m_pGameBoard)[From];
+    const CPiece *pTo = (*m_pGameBoard)[To];
     assert(pFrom != nullptr);
     EType Type = pFrom->getType();
     assert(Type == Chess::Pawn);

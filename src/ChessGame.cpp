@@ -24,7 +24,7 @@ void CChessGame::init()
     // reset move state: white to move
     m_MoveState = WhiteMove;
 
-    CPiece::setBoard(&m_PieceMap);
+    CPiece::setBoard(&m_GameBoard);
 
     // set piece map to null
     for (int i = 0; i < BOARD_SIZE; i++) {

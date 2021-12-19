@@ -2,9 +2,10 @@
 #define _PIECE_H__INCLUDED_
 
 #include "ChessDef.h"
-#include <map>
 
 using namespace Chess;
+
+class CGameBoard;
 
 class CPiece
 {
@@ -16,7 +17,7 @@ public:
     ETeam getTeam() const;
 
     // associate board square status
-    static void setBoard(std::map <TPosition, const CPiece *> *pPieceMap);
+    static void setBoard(const CGameBoard *pGameBoard);
 
     // destructor
     virtual ~CPiece();
@@ -46,7 +47,7 @@ protected:
     // position, if alive==false, then save the last position
     TPosition m_Pos;
 
-    // 64 position to hold pieces;
-    static std::map <TPosition, const CPiece *> *m_pPieceMap;
+    // GameBoard object to hold all pieces info;
+    static const CGameBoard *m_pGameBoard;
 };
 #endif // !defined(_PIECE_H__INCLUDED_)

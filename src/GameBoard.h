@@ -6,12 +6,12 @@
 
 // this struct is to store one player's all pieces
 struct TPlayerPiece{
-    CKing *pKing;
-    CQueen *pQueen;
-    CBishop *pBishop[BISHOP_NUM];
-    CKnight *pKnight[KNIGHT_NUM];
-    CRook *pRook[ROOK_NUM];
-    CPawn *pPawn[PAWN_NUM];
+    CPiece *pKing;
+    CPiece *pQueen;
+    CPiece *pBishop[BISHOP_NUM];
+    CPiece *pKnight[KNIGHT_NUM];
+    CPiece *pRook[ROOK_NUM];
+    CPiece *pPawn[PAWN_NUM];
     CPiece *pPiece[PLAYER_PIECE_NUM];
     ETeam Team;
 
