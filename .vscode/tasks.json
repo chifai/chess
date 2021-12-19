@@ -19,13 +19,13 @@
                 "${workspaceFolder}/build/chess_main"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}/src"
             },
             "problemMatcher": [
                 "$gcc"
             ],
             "group": "build",
-            "detail": "compiler: /usr/bin/g++"
-        }
+            "detail": "compiler: /usr/bin/g++",
+        },
     ]
 }
