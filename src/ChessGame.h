@@ -1,13 +1,11 @@
 #if !defined(_CHESSGAME_H__INCLUDED_)
 #define _CHESSGAME_H__INCLUDED_
 
-#include "_Chess.h"
+#include "ChessDef.h"
+#include "Piece.h"
 #include "GameBoard.h"
 
 #include <vector>
-#include <map>
-
-typedef std::map <TPosition, const CPiece *> TPieceMap;
 
 class CChessGame
 {
@@ -51,6 +49,5 @@ private:
 
     // CGameBoard object to manipulate piece position and status
     CGameBoard m_GameBoard;
-
 };
 #endif // !defined(_CHESSGAME_H__INCLUDED_)
