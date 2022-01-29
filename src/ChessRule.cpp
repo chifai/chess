@@ -38,6 +38,9 @@ bool CChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPos
     // check type
     if (SqFrom.PieceType != Bishop) return false;
 
+    // check if diagonal move
+    if (!isDiagonalMove(From, To)) return false;
+
     // check target position is not friendly
     if (PiecePos[To.x * BOARD_SIZE + To.y].PieceTeam == SqFrom.PieceTeam) return false;
 
@@ -110,8 +113,19 @@ bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
 
 bool CChessRule::isOctalMove(const TPosition &From, const TPosition &To) 
 {
+    return isDiagonalMove(From, To) || isStraightMove(From, To);
+}
+
+bool CChessRule::isDiagonalMove(const TPosition &From, const TPosition &To)
+{
     int RowDiff = To.x - From.x;
     int ColDiff = To.y - From.y;
+    return RowDiff != 0 && abs(RowDiff) == abs(ColDiff);
+}
 
-    return RowDiff == 0 || ColDiff == 0 || abs(RowDiff) == abs(ColDiff);
+bool CChessRule::isStraightMove(const TPosition &From, const TPosition &To)
+{
+    int RowDiff = To.x - From.x;
+    int ColDiff = To.y - From.y;
+    return RowDiff * ColDiff == 0 && RowDiff + ColDiff != 0;
 }

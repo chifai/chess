@@ -36,4 +36,10 @@ private:
 
     // check if the move is one of the eight directions
     static bool isOctalMove(const TPosition &From, const TPosition &To);
+
+    // check if the move is diagonal
+    static bool isDiagonalMove(const TPosition &From, const TPosition &To);
+
+    // check if the move is straight
+    static bool isStraightMove(const TPosition &From, const TPosition &To);
 };
