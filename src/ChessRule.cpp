@@ -87,10 +87,7 @@ bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPos
 bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
     if (From.x == To.x && From.y == To.y) return false;
-    if (isOctalMove(From, To) == false) {
-        assert(false);
-        return true;
-    }
+    assert(isOctalMove(From, To));
 
     // get steps in between
     int RowDiff = To.x - From.x;
