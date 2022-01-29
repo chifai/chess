@@ -3,6 +3,7 @@
 
 namespace Chess {
     const int PLAYER_PIECE_NUM = 16;
+    const int PLAYER_NUM = 2;
     const int PIECE_NUM = 32;
     const int BOARD_SIZE = 8;
     const int SQUARE_NUM = BOARD_SIZE * BOARD_SIZE;
@@ -12,6 +13,8 @@ namespace Chess {
     const int ROOK_NUM = 2;
     const int QUEEN_NUM = 1;
     const int KING_NUM = 1;
+    const int WHITE_STARTROW = 0;
+    const int BLACK_STARTROW = 7;
 
     struct TPosition {
         int x;
@@ -24,9 +27,9 @@ namespace Chess {
     };
 
     enum ETeam {
-        White = 0,
+        None = 0,
+        White,
         Black,
-        Num,
     };
 
     enum EType {
@@ -42,12 +45,9 @@ namespace Chess {
     enum EGameState {
         WhiteMove = 0,
         WhitePromote,
-        WhiteSaveTheKing,
         WhiteCheckmate,
         BlackMove,
         BlackPromote,
-        BlackSaveTheKing,
-        BlackCheck,
         BlackCheckmate,
         DrawByStalemate,
         DrawByFiftyMoveRule,
@@ -69,6 +69,16 @@ namespace Chess {
         bool bCheckmate;
     };
 
+    struct TPiece {
+        bool bAlive;
+        ETeam Team;
+        TPosition Pos;
+    };
+
+    struct TSquareStatus {
+        ETeam PieceTeam;
+        EType PieceType;
+    };
 
     struct TProps {
         ETeam Team;

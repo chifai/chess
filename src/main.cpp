@@ -1,20 +1,23 @@
 #include <iostream>
 #include <cassert>
-#include "Piece.h"
-#include "Pawn.h"
 #include "ChessGame.h"
 
 bool askValidMove(const CChessGame &Game);
 void printBoard(const CChessGame &Game);
-void printPieceName(const CPiece *pPiece);
+void printPieceName(const TSquareStatus &pPiece);
 
 int main()
 {
     CChessGame Game;
     printf("Game Start\n");
+
+    printf("move pawn\n");
+    printf("%d, ", Game.moveOnePiece({1, 1}, {2, 1}));  // white pawn forward
+    printf("%d, ", Game.moveOnePiece({6, 1}, {4, 1}));  // black pawn forward
+    printf("\n");
     printBoard(Game);
 
-    while(askValidMove(Game) == true) {}
+    // while(askValidMove(Game) == true) {}
     return 0;
 }
 
@@ -36,44 +39,44 @@ bool askValidMove(const CChessGame &Game)
         return false;
     }
 
-    printf("Move from (%d, %d) to (%d, %d): %d\n\n", From.x, From.y, To.x, To.y, Game.isValidMove(From, To));
+    printf("Move from (%d, %d) to (%d, %d): %d\n\n", From.x, From.y, To.x, To.y, Game.isSafePieceMove(From, To));
     return true;
 }
 
 void printBoard(const CChessGame &Game)
 {
     TPosition Pos;
-    const CPiece *pPiece = nullptr;
+    TSquareStatus Piece;
     for (int i = BOARD_SIZE - 1; i >= 0; i--) {
         printf("| ");
         for (int j = 0; j < BOARD_SIZE; j++) {
             Pos.x = i;
             Pos.y = j;
-            pPiece = Game.getPiece(Pos);
+            Piece = Game.getPiece(Pos);
 
-            printPieceName(pPiece);
+            printPieceName(Piece);
             printf(" | ");
         }
         printf("\n");
     }
 }
 
-void printPieceName(const CPiece *pPiece)
+void printPieceName(const TSquareStatus &pPiece)
 {
-    if (pPiece == nullptr) {
+    if (pPiece.PieceTeam == None) {
         printf("----    ");
         return;
     }
 
     // print team
-    if (pPiece->getTeam() == White) {
+    if (pPiece.PieceTeam == White) {
         printf("W.");
     }
     else {
         printf("B.");
     }
 
-    EType PieceType = pPiece->getType();
+    EType PieceType = pPiece.PieceType;
     switch (PieceType)
     {
     case EType::Pawn:

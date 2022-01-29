@@ -1,28 +1,20 @@
 #if !defined(_GAMEBOARD_H__INCLUDED_)
 #define _GAMEBOARD_H__INCLUDED_
 
+// describe the piece positions on a game board
 
-#include "_Chess.h"
+#include "ChessDef.h"
+using namespace Chess;
 
 // this struct is to store one player's all pieces
 struct TPlayerPiece{
-    CPiece *pKing;
-    CPiece *pQueen;
-    CPiece *pBishop[BISHOP_NUM];
-    CPiece *pKnight[KNIGHT_NUM];
-    CPiece *pRook[ROOK_NUM];
-    CPiece *pPawn[PAWN_NUM];
-    CPiece *pPiece[PLAYER_PIECE_NUM];
     ETeam Team;
-
-    // constructor
-    TPlayerPiece(const ETeam Team);
-
-    // destructor
-    ~TPlayerPiece();
-
-    // reset original positions
-    void reset();
+    TPosition King;
+    TPosition Queen;
+    TPosition Bishop[BISHOP_NUM];
+    TPosition Knight[KNIGHT_NUM];
+    TPosition Rook[ROOK_NUM];
+    TPosition Pawn[PAWN_NUM];
 };
 
 // this class is to
@@ -43,15 +35,34 @@ public:
     // update position to m_pPiecePos
     void updatePiecePos();
 
-    // move piece from one to another
-    void move(const TPosition &From, const TPosition &To);
+    // reset piece to be all alive and to original positions
+    void resetPiece();
+
+    // move one piece to another position, and update players' status
+    // do nothing if no piece is found at departing position
+    void movePiece(const TPosition &From, const TPosition &To);
+
+    // try to move a piece and output the positions
+    void tryMovePiece(const TPosition &From, const TPosition &To, TSquareStatus Piece[]) const;
+
+    // promote a pawn and update players' status
+    // do nothing if no the pawn is not at the end of board or no pawn is found at departing position
+    void promotePawn(const TPosition &PawnPosition, const EType PromoteType);
+
+    // get board
+    const TSquareStatus* getBoard() const;
 
     // get piece from the map by position
-    const CPiece *operator[](const TPosition &Pos) const;
+    TSquareStatus operator[](const TPosition &Pos) const;
+
+    // get the king
+    TPosition getKing(ETeam Team) const;
 
 private:
-    const CPiece *m_pPiecePos[BOARD_SIZE][BOARD_SIZE];
+    // all squares status
+    TSquareStatus m_Square[SQUARE_NUM];
 
-    TPlayerPiece m_PlayerPiece[ETeam::Num];
+    // player pieces
+    TPlayerPiece m_PlayerPiece[PLAYER_NUM];
 };
 #endif // !defined(_GAMEBOARD_H__INCLUDED_)

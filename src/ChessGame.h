@@ -2,10 +2,9 @@
 #define _CHESSGAME_H__INCLUDED_
 
 #include "ChessDef.h"
-#include "Piece.h"
+#include "ChessRule.h"
 #include "GameBoard.h"
-
-#include <vector>
+#include "MoveLog.h"
 
 class CChessGame
 {
@@ -19,35 +18,56 @@ public:
     // initialize a new game
     void init();
 
-    // check if it is a valid move
-    bool isValidMove(const TPosition &From, const TPosition &To) const;
-
-    // show all valid move on particular piece, return the numbers
-    int showAllValidMoves(const TPosition &From, TPosition AllValidDest[]) const;
-
-    // move a piece
-    bool move(const TPosition &From, const TPosition &To);
+    // move one piece
+    bool moveOnePiece(const TPosition &From, const TPosition &To);
 
     // move a pawn to the end and promote to a piece
     bool promote(const TPosition &From, const EType PromoteType);
 
+    // check if it is a valid piece move and the king is safe
+    bool isSafePieceMove(const TPosition &From, const TPosition &To) const;
+
+    // check if a piece is being attacked and show all of the attacking positions
+    int showAttacker(const TPosition &Piece, TPosition AttackingPiece[]) const;
+
+    // show all valid move on particular piece, return the numbers
+    int showAllValidMoves(const TPosition &From, TPosition ValidDest[]) const;
+
     // get the piece of particular position
-    const CPiece *getPiece(const TPosition &Pos) const;
+    TSquareStatus getPiece(const TPosition &Pos) const;
 
     // is check?
     bool isCheck() const;
 
     // is checkmate?
-    bool isCheckmate() const;
+    bool isCheckmate(ETeam Team) const;
 
 private:
+    // check if it is a valid move
+    bool isValidPieceMove(const TPosition &From, const TPosition &To) const;
+
+    // add a move to log
+    void addMove(const TPosition &From, const TPosition &To);
+
+    // try a move to see if king will be attacked
+    bool isKingAttackedAfterMove(const TPosition &From, const TPosition &To) const;
+
+    // check if the piece trying to move is from correct team
+    bool isCorrectTeamToMove(const TPosition &From) const;
+
+    // check if promotion required
+    bool isPromotionRequired(const TPosition &Piece) const;
+
+    // check if a piece is trapped with no valid moves
+    bool isTrapped(const TPosition &Piece) const;
+
     // current game state
     EGameState m_GameState;
 
-    // every move log
-    std::vector <TMoveLog> m_MoveLog;
-
-    // CGameBoard object to manipulate piece position and status
+    // game board
     CGameBoard m_GameBoard;
+
+    // record move log
+    CMoveLog m_MoveLog;
 };
 #endif // !defined(_CHESSGAME_H__INCLUDED_)
