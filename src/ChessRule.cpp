@@ -38,6 +38,17 @@ bool ChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
 
 bool ChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
+    TSquareStatus SqFrom = PiecePos[From.x * BOARD_SIZE + From.y];
+    // check type
+    if (SqFrom.PieceType != Knight) return false;
+
+    // check target position is not friendly
+    if (PiecePos[To.x * BOARD_SIZE + To.y].PieceTeam == SqFrom.PieceTeam) return false;
+
+    // check move
+    if (abs(From.x - To.x) == 2 && abs(From.y - To.y) == 1) return true;
+    if (abs(From.x - To.x) == 1 && abs(From.y - To.y) == 2) return true;
+
     return false;
 }
 

@@ -14,6 +14,10 @@ int main()
     printf("move pawn\n");
     printf("%d, ", Game.moveOnePiece({1, 1}, {2, 1}));  // white pawn forward
     printf("%d, ", Game.moveOnePiece({6, 1}, {4, 1}));  // black pawn forward
+
+    printf("move knight\n");
+    printf("%d, ", Game.moveOnePiece({0, 1}, {2, 2}));  // white knight forward
+    printf("%d, ", Game.moveOnePiece({7, 1}, {5, 0}));  // black knight forward
     printf("\n");
     printBoard(Game);
 
