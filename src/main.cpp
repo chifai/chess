@@ -40,6 +40,15 @@ int main()
     printf("%d, ", Game.moveOnePiece({0, 1}, {1, 1}));
     printf("\n");
 
+    // black move
+    printf("move queen: ");
+    printf("%d, ", Game.moveOnePiece({7, 3}, {6, 4}));
+    printf("%d, ", Game.moveOnePiece({1, 3}, {3, 3}));
+    printf("%d, ", Game.moveOnePiece({6, 4}, {3, 3}));
+    printf("%d, ", Game.moveOnePiece({0, 3}, {4, 7}));
+    printf("%d, ", Game.moveOnePiece({6, 4}, {2, 4}));
+    printf("\n");
+
     printBoard(Game);
 
     // while(askValidMove(Game) == true) {}

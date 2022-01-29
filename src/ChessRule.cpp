@@ -82,7 +82,18 @@ bool CChessRule::moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosit
 
 bool CChessRule::moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
-    return false;
+    TSquareStatus SqFrom = PiecePos[From.x * BOARD_SIZE + From.y];
+    // check type
+    if (SqFrom.PieceType != Queen) return false;
+
+    // check if octal move
+    if (!isOctalMove(From, To)) return false;
+
+    // check target position is not friendly
+    if (PiecePos[To.x * BOARD_SIZE + To.y].PieceTeam == SqFrom.PieceTeam) return false;
+
+    // check if blocked
+    return !isBlocked(PiecePos, From, To);
 }
 
 bool CChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
