@@ -98,7 +98,21 @@ bool CChessRule::moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
 
 bool CChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
 {
-    return false;
+    TSquareStatus SqFrom = PiecePos[From.x * BOARD_SIZE + From.y];
+    // check type
+    if (SqFrom.PieceType != King) return false;
+
+    // #TODO: check castle rule
+
+    // check if octal move and only move one step
+    int RowDiff = To.x - From.x;
+    int ColDiff = To.y - From.y;
+    if (abs(RowDiff) > 1 || abs(ColDiff) > 1) return false;
+
+    // check target position is not friendly
+    if (PiecePos[To.x * BOARD_SIZE + To.y].PieceTeam == SqFrom.PieceTeam) return false;
+
+    return true;
 }
 
 bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece)

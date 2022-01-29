@@ -11,12 +11,12 @@ int main()
     CChessGame Game;
     printf("Game Start\n");
 
-    printf("move pawn: ");
+    printf("test pawn: ");
     printf("%d, ", Game.moveOnePiece({1, 1}, {2, 1}));  // white pawn forward
     printf("%d, ", Game.moveOnePiece({6, 1}, {4, 1}));  // black pawn forward
     printf("\n");
 
-    printf("move knight: ");
+    printf("test knight: ");
     printf("%d, ", Game.moveOnePiece({0, 1}, {2, 2}));  // white knight forward
     printf("%d, ", Game.moveOnePiece({7, 1}, {5, 0}));  // black knight forward
     printf("\n");
@@ -26,13 +26,13 @@ int main()
     printf("%d, ", Game.moveOnePiece({6, 0}, {4, 0}));
     printf("\n");
 
-    printf("move bishop: ");
+    printf("test bishop: ");
     printf("%d, ", Game.moveOnePiece({0, 2}, {2, 0}));
     printf("%d, ", Game.moveOnePiece({7, 2}, {6, 1}));
     printf("%d, ", Game.moveOnePiece({2, 0}, {6, 4}));
     printf("\n");
 
-    printf("move Rook: ");
+    printf("test Rook: ");
     printf("%d, ", Game.moveOnePiece({7, 0}, {7, 2}));
     printf("%d, ", Game.moveOnePiece({0, 0}, {0, 1}));
     printf("%d, ", Game.moveOnePiece({7, 2}, {6, 2}));  // invalid
@@ -41,12 +41,18 @@ int main()
     printf("\n");
 
     // black move
-    printf("move queen: ");
+    printf("test queen: ");
     printf("%d, ", Game.moveOnePiece({7, 3}, {6, 4}));
     printf("%d, ", Game.moveOnePiece({1, 3}, {3, 3}));
-    printf("%d, ", Game.moveOnePiece({6, 4}, {3, 3}));
-    printf("%d, ", Game.moveOnePiece({0, 3}, {4, 7}));
+    printf("%d, ", Game.moveOnePiece({6, 4}, {3, 3}));  // invalid
+    printf("%d, ", Game.moveOnePiece({0, 3}, {4, 7}));  // invalid
     printf("%d, ", Game.moveOnePiece({6, 4}, {2, 4}));
+    printf("\n");
+
+    printf("test king: ");
+    printf("%d, ", Game.moveOnePiece({1, 5}, {2, 4}));
+    printf("%d, ", Game.moveOnePiece({7, 4}, {6, 4}));
+    printf("%d, ", Game.moveOnePiece({0, 4}, {1, 3}));
     printf("\n");
 
     printBoard(Game);
