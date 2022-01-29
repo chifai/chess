@@ -39,7 +39,7 @@ bool CChessGame::isValidPieceMove(const TPosition &From, const TPosition &To) co
     case Rook:      bValid = CChessRule::moveRook(pBoard, From, To); break;
     case Queen:     bValid = CChessRule::moveQueen(pBoard, From, To); break;
     case King:      bValid = CChessRule::moveKing(pBoard, m_MoveLog, From, To); break;
-    default:        bValid = false; assert(false);
+    default:        bValid = false; assert(false); break;
     }
 
     return bValid;
