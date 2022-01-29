@@ -34,7 +34,15 @@ bool CChessRule::movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveL
 
 bool CChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
-    return false;
+    TSquareStatus SqFrom = PiecePos[From.x * BOARD_SIZE + From.y];
+    // check type
+    if (SqFrom.PieceType != Bishop) return false;
+
+    // check target position is not friendly
+    if (PiecePos[To.x * BOARD_SIZE + To.y].PieceTeam == SqFrom.PieceTeam) return false;
+
+    // check if blocked
+    return !isBlocked(PiecePos, From, To);
 }
 
 bool CChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
@@ -84,18 +92,18 @@ bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
     // get steps in between
     int RowDiff = To.x - From.x;
     int ColDiff = To.y - From.y;
-    int RowStep, ColStep, nStep;
+    int RowStep, ColStep, StepNumBetween;
 
     RowStep = RowDiff == 0 ? 0 : RowDiff > 0 ? 1 : -1;
     ColStep = ColDiff == 0 ? 0 : ColDiff > 0 ? 1 : -1;
 
+    StepNumBetween = RowDiff == 0 ? ColDiff - 1 : RowDiff - 1;
     TPosition CurPos = From;
-    do {
+    for (int i = 0; i < StepNumBetween; i++) {
         CurPos.x += RowStep;
         CurPos.y += ColStep;
-        assert(CurPos.x < BOARD_SIZE && CurPos.y < BOARD_SIZE);
         if (PiecePos[CurPos.x * BOARD_SIZE + CurPos.y].PieceTeam != None) return true;
-    } while (CurPos.x != To.x || CurPos.y != To.y);
+    }
 
     return false;
 }

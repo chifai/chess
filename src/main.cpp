@@ -26,6 +26,12 @@ int main()
     printf("%d, ", Game.moveOnePiece({6, 0}, {4, 0}));
     printf("\n");
 
+    printf("move bishop: ");
+    printf("%d, ", Game.moveOnePiece({0, 2}, {2, 0}));
+    printf("%d, ", Game.moveOnePiece({7, 2}, {6, 1}));
+    printf("%d, ", Game.moveOnePiece({2, 0}, {6, 4}));
+    printf("\n");
+
     printBoard(Game);
 
     // while(askValidMove(Game) == true) {}
