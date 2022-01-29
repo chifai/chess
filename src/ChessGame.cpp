@@ -88,16 +88,6 @@ TSquareStatus CChessGame::getPiece(const TPosition &Pos) const
 
 bool CChessGame::isCheckmate(ETeam Team) const
 {
-    const CPiece *pFromPiece = m_PieceMap.at(From);
-
-    // piece exists
-    if (pFromPiece == nullptr) return false;
-
-    // check piece team matches with correct move state
-    const ETeam FromTeam = pFromPiece->getTeam();
-    if ((FromTeam == White) && (m_GameState != WhiteMove)) return false;
-    if ((FromTeam == Black) && (m_GameState != BlackMove)) return false;
-
     return false;
 }
 
