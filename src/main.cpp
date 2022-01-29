@@ -11,14 +11,21 @@ int main()
     CChessGame Game;
     printf("Game Start\n");
 
-    printf("move pawn\n");
+    printf("move pawn: ");
     printf("%d, ", Game.moveOnePiece({1, 1}, {2, 1}));  // white pawn forward
     printf("%d, ", Game.moveOnePiece({6, 1}, {4, 1}));  // black pawn forward
+    printf("\n");
 
-    printf("move knight\n");
+    printf("move knight: ");
     printf("%d, ", Game.moveOnePiece({0, 1}, {2, 2}));  // white knight forward
     printf("%d, ", Game.moveOnePiece({7, 1}, {5, 0}));  // black knight forward
     printf("\n");
+
+    printf("invalid pawn move: ");
+    printf("%d, ", Game.moveOnePiece({1, 0}, {2, 1}));
+    printf("%d, ", Game.moveOnePiece({6, 0}, {4, 0}));
+    printf("\n");
+
     printBoard(Game);
 
     // while(askValidMove(Game) == true) {}

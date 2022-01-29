@@ -1,7 +1,8 @@
 #include "ChessRule.h"
+#include <cassert>
 #include <cmath>
 
-bool ChessRule::movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
+bool CChessRule::movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
 {
     // check type
     if (PiecePos[From.x * BOARD_SIZE + From.y].PieceType != Pawn) return false;
@@ -21,22 +22,22 @@ bool ChessRule::movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLo
     }
     else if (FromTeam == White && From.x == 1 && To.x == 3) {
         // white pawn moves two steps forward condition
-        return From.y == To.y && ToSquare.PieceTeam == None;
+        return From.y == To.y && ToSquare.PieceTeam == None && isBlocked(PiecePos, From, To) == false;
     }
     else if (FromTeam == Black && From.x == 6 && To.x == 4) {
         // black pawn moves two steps forward condition
-        return From.y == To.y && ToSquare.PieceTeam == None;
+        return From.y == To.y && ToSquare.PieceTeam == None && isBlocked(PiecePos, From, To) == false;
     }
 
     return false;
 }
 
-bool ChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
+bool CChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
     return false;
 }
 
-bool ChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
+bool CChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
     TSquareStatus SqFrom = PiecePos[From.x * BOARD_SIZE + From.y];
     // check type
@@ -52,22 +53,57 @@ bool ChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
     return false;
 }
 
-bool ChessRule::moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
+bool CChessRule::moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
     return false;
 }
 
-bool ChessRule::moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
+bool CChessRule::moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
 {
     return false;
 }
 
-bool ChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
+bool CChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
 {
     return false;
 }
 
-bool ChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece)
+bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece)
 {
     return false;
+}
+
+bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
+{
+    if (From.x == To.x && From.y == To.y) return false;
+    if (isOctalMove(From, To) == false) {
+        assert(false);
+        return true;
+    }
+
+    // get steps in between
+    int RowDiff = To.x - From.x;
+    int ColDiff = To.y - From.y;
+    int RowStep, ColStep, nStep;
+
+    RowStep = RowDiff == 0 ? 0 : RowDiff > 0 ? 1 : -1;
+    ColStep = ColDiff == 0 ? 0 : ColDiff > 0 ? 1 : -1;
+
+    TPosition CurPos = From;
+    do {
+        CurPos.x += RowStep;
+        CurPos.y += ColStep;
+        assert(CurPos.x < BOARD_SIZE && CurPos.y < BOARD_SIZE);
+        if (PiecePos[CurPos.x * BOARD_SIZE + CurPos.y].PieceTeam != None) return true;
+    } while (CurPos.x != To.x || CurPos.y != To.y);
+
+    return false;
+}
+
+bool CChessRule::isOctalMove(const TPosition &From, const TPosition &To) 
+{
+    int RowDiff = To.x - From.x;
+    int ColDiff = To.y - From.y;
+
+    return RowDiff == 0 || ColDiff == 0 || abs(RowDiff) == abs(ColDiff);
 }

@@ -33,12 +33,12 @@ bool CChessGame::isValidPieceMove(const TPosition &From, const TPosition &To) co
     bool bValid;
 
     switch (FromType) {
-    case Pawn:      bValid = ChessRule::movePawn(pBoard, m_MoveLog, From, To); break;
-    case Knight:    bValid = ChessRule::moveKnight(pBoard, From, To); break;
-    case Bishop:    bValid = ChessRule::moveBishop(pBoard, From, To); break;
-    case Rook:      bValid = ChessRule::moveRook(pBoard, From, To); break;
-    case Queen:     bValid = ChessRule::moveQueen(pBoard, From, To); break;
-    case King:      bValid = ChessRule::moveKing(pBoard, m_MoveLog, From, To); break;
+    case Pawn:      bValid = CChessRule::movePawn(pBoard, m_MoveLog, From, To); break;
+    case Knight:    bValid = CChessRule::moveKnight(pBoard, From, To); break;
+    case Bishop:    bValid = CChessRule::moveBishop(pBoard, From, To); break;
+    case Rook:      bValid = CChessRule::moveRook(pBoard, From, To); break;
+    case Queen:     bValid = CChessRule::moveQueen(pBoard, From, To); break;
+    case King:      bValid = CChessRule::moveKing(pBoard, m_MoveLog, From, To); break;
     default:        bValid = false; assert(false);
     }
 
@@ -109,7 +109,7 @@ bool CChessGame::isKingAttackedAfterMove(const TPosition &From, const TPosition 
     TPosition KingPos = m_GameBoard.getKing(FromTeam);
 
     // return true if the king is not attacked
-    return !ChessRule::isAttacked(TryPiece, KingPos);
+    return !CChessRule::isAttacked(TryPiece, KingPos);
 }
 
 bool CChessGame::isCorrectTeamToMove(const TPosition &From) const

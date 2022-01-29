@@ -7,25 +7,33 @@
 #include "MoveLog.h"
 using namespace Chess;
 
-namespace ChessRule {
+class CChessRule {
+public:
     // check pawn move if valid, en passant requires MoveLog
-    bool movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
+    static bool movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
 
     // check bishop move if valid
-    bool moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
+    static bool moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
 
     // check knight move if valid
-    bool moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
+    static bool moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
 
     // check rook move if valid
-    bool moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
+    static bool moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
 
     // check queen move if valid
-    bool moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
+    static bool moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
 
     // check king move if valid, castle requires MoveLog
-    bool moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
+    static bool moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
 
     // check if attacked
-    bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece);
+    static bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece);
+
+private:
+    // check if any pieces blocked from two points
+    static bool isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
+
+    // check if the move is one of the eight directions
+    static bool isOctalMove(const TPosition &From, const TPosition &To);
 };
