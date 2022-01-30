@@ -133,9 +133,27 @@ bool CChessRule::movePiece(const TSquareStatus PiecePos[SQUARE_NUM], const CMove
     return bValid;
 }
 
-bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece)
+bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam)
 {
+    TPosition PossibleAttacker[PIECE_NUM];
+    int PossibleAttackerNum = getPossibleAttackers(PiecePos, Prey, AttackerTeam, PossibleAttacker);
+    for (int i = 0; i < PossibleAttackerNum; i++) {
+        if (isAttackSuccess(PiecePos, PossibleAttacker[i], Prey)) return true;
+    }
+
     return false;
+}
+
+int CChessRule::getAllAttackers(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM]) 
+{
+    TPosition PossibleAttacker[PIECE_NUM];
+    int PossibleAttackerNum = getPossibleAttackers(PiecePos, Prey, AttackerTeam, PossibleAttacker);
+    int AttackerNum = 0;
+    for (int i = 0; i < PossibleAttackerNum; i++) {
+        if (isAttackSuccess(PiecePos, PossibleAttacker[i], Prey)) Attacker[AttackerNum++] = PossibleAttacker[i];
+    }
+
+    return AttackerNum;
 }
 
 bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To)
@@ -179,4 +197,85 @@ bool CChessRule::isStraightMove(const TPosition &From, const TPosition &To)
     int RowDiff = To.y - From.y;
     int ColDiff = To.x - From.x;
     return RowDiff * ColDiff == 0 && RowDiff + ColDiff != 0;
+}
+
+bool CChessRule::isAttackSuccess(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Predator, const TPosition &Prey)
+{
+    // assert false if same position
+    if (Predator == Prey) {
+        assert(false);
+        return false;
+    }
+
+    TSquareStatus PredatorSq = PiecePos[Predator.y * BOARD_SIZE + Predator.x];
+
+    // return false if predator pos is empty
+    if (PredatorSq.isOccupied() == false) return false;
+
+    // check if success according to different piece type
+    int xDiff = Predator.x - Prey.x;
+    int yDiff = Predator.y - Prey.y;
+    switch (PredatorSq.PieceType) {
+    case Pawn:
+        if (abs(xDiff) != 1) return false;
+        return PredatorSq.PieceTeam == White ? yDiff == -1 : yDiff== 1;
+
+    case Knight:
+        return (abs(xDiff) == 2 && abs(yDiff) == 1) || (abs(xDiff) == 1 && abs(yDiff) == 2);
+
+    case Bishop:
+        return abs(xDiff) == abs(yDiff);
+
+    case Rook:
+        return xDiff * yDiff == 0;
+
+    case Queen:
+        return abs(xDiff) == abs(yDiff) || xDiff * yDiff == 0;
+
+    case King:
+        return abs(xDiff) <= 1 && abs(yDiff) <= 1;
+
+    default:
+        assert(false);
+    }
+
+    return false;
+}
+
+int CChessRule::getPossibleAttackers(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM])
+{
+    ETeam DefenserTeam = AttackerTeam == White ? Black : White;
+    TPosition Predator;
+
+    // move one step each time at different direction to find out if there is opponent piece and correct piece type
+    const int OCTAL_DIRNUM = 8;
+    const TPosition OctDir[OCTAL_DIRNUM] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    int AttackerNum = 0;
+    for (int i = 0; i < OCTAL_DIRNUM; i++) {
+        Predator = Prey + OctDir[i];
+        while (Predator.inRange()) {
+            ETeam PredatorTeam = PiecePos[Predator.y * BOARD_SIZE + Predator.x].PieceTeam;
+            if (PredatorTeam == DefenserTeam) {
+                break;
+            }
+            else if (PredatorTeam == AttackerTeam) {
+                Attacker[AttackerNum++] = Predator;
+                break;
+            }
+            Predator += OctDir[i];
+        }
+    }
+
+    // check knight attacked
+    const int KNIGHT_DIRNUM = 8;
+    const TPosition KnightDir[KNIGHT_DIRNUM] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+    for (int i = 0; i < KNIGHT_DIRNUM; i++) {
+        Predator = Prey + KnightDir[i];
+        if (!Predator.inRange()) continue;
+        ETeam PredatorTeam = PiecePos[Predator.y * BOARD_SIZE + Predator.x].PieceTeam;
+        if (PredatorTeam == DefenserTeam) continue;
+        if (PredatorTeam == AttackerTeam) Attacker[AttackerNum++] = Predator;
+    }
+
+    return AttackerNum;
 }

@@ -24,6 +24,33 @@ namespace Chess {
         {
             return (x * BOARD_SIZE + y < rhs.x * BOARD_SIZE + rhs.y);
         }
+
+        TPosition& operator+=(const TPosition &rhs) 
+        {
+            this->x += rhs.x;
+            this->y += rhs.y;
+            return *this;
+        }
+
+        TPosition operator+(const TPosition &rhs) const
+        {
+            return {x + rhs.x, y + rhs.y};
+        }
+
+        bool operator==(const TPosition &rhs) const
+        {
+            return x == rhs.x && y == rhs.y;
+        }
+
+        bool inRange() const
+        {
+            return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
+        }
+
+        int to1D() const
+        {
+            return y * BOARD_SIZE + x;
+        }
     };
 
     enum ETeam {
@@ -78,6 +105,16 @@ namespace Chess {
     struct TSquareStatus {
         ETeam PieceTeam;
         EType PieceType;
+
+        TSquareStatus() {
+            PieceTeam = None;
+            PieceType = Undef;
+        }
+
+        bool isOccupied() const
+        {
+            return PieceTeam != None;
+        }
     };
 
     struct TProps {

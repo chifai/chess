@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <cassert>
 #include "ChessGame.h"
 
@@ -54,6 +55,24 @@ int main()
     printf("%d, ", Game.moveOnePiece({4, 7}, {4, 6}));
     printf("%d, ", Game.moveOnePiece({4, 0}, {3, 1}));
     printf("\n");
+
+    printf("test attacker check:\n");
+    TPosition Attacker[PIECE_NUM] = {};
+    int AttackerNum;
+
+    memset(Attacker, 0, sizeof(Attacker));
+    AttackerNum = Game.getAttackers({3, 4}, Black, Attacker);
+    printf("%d, {%d, %d}\n", AttackerNum, Attacker[0].x, Attacker[0].y);
+    memset(Attacker, 0, sizeof(Attacker));
+    AttackerNum = Game.getAttackers({1, 4}, White, Attacker);
+    printf("%d, {%d, %d}\n", AttackerNum, Attacker[0].x, Attacker[0].y);
+    memset(Attacker, 0, sizeof(Attacker));
+    AttackerNum = Game.getAttackers({2, 1}, White, Attacker);
+    printf("%d, {%d, %d}, {%d, %d}, {%d, %d}\n", AttackerNum,
+    Attacker[0].x, Attacker[0].y,
+    Attacker[1].x, Attacker[1].y,
+    Attacker[2].x, Attacker[2].y
+    );
 
     printBoard(Game);
 

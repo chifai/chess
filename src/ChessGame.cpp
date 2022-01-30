@@ -67,6 +67,11 @@ bool CChessGame::isSafePieceMove(const TPosition &From, const TPosition &To) con
     return isValidPieceMove(From, To) && isKingAttackedAfterMove(From, To);
 }
 
+int CChessGame::getAttackers(const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM]) const
+{
+    return CChessRule::getAllAttackers(m_GameBoard.getBoard(), Prey, AttackerTeam, Attacker);
+}
+
 TSquareStatus CChessGame::getPiece(const TPosition &Pos) const
 {
     return m_GameBoard[Pos];
@@ -95,7 +100,7 @@ bool CChessGame::isKingAttackedAfterMove(const TPosition &From, const TPosition 
     TPosition KingPos = m_GameBoard.getKing(FromTeam);
 
     // return true if the king is not attacked
-    return !CChessRule::isAttacked(TryPiece, KingPos);
+    return !CChessRule::isAttacked(TryPiece, KingPos, FromTeam == White ? Black : White);
 }
 
 bool CChessGame::isCorrectTeamToMove(const TPosition &From) const

@@ -13,7 +13,10 @@ public:
     static bool movePiece(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
 
     // check if attacked
-    static bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece);
+    static bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam);
+
+    // get all attackers
+    static int getAllAttackers(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM]);
 
 private:
     // check pawn move if valid, en passant requires MoveLog
@@ -45,4 +48,10 @@ private:
 
     // check if the move is straight
     static bool isStraightMove(const TPosition &From, const TPosition &To);
+
+    // check if attack success assuming no pieces in between, not including en passant
+    static bool isAttackSuccess(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Predator, const TPosition &Prey);
+
+    // get possible attacker
+    static int getPossibleAttackers(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PLAYER_NUM]);
 };

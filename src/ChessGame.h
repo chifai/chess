@@ -28,7 +28,7 @@ public:
     bool isSafePieceMove(const TPosition &From, const TPosition &To) const;
 
     // check if a piece is being attacked and show all of the attacking positions
-    int showAttacker(const TPosition &Piece, TPosition AttackingPiece[]) const;
+    int getAttackers(const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM]) const;
 
     // show all valid move on particular piece, return the numbers
     int showAllValidMoves(const TPosition &From, TPosition ValidDest[]) const;
