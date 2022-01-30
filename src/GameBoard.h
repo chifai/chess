@@ -47,7 +47,7 @@ public:
 
     // promote a pawn and update players' status
     // do nothing if no the pawn is not at the end of board or no pawn is found at departing position
-    void promotePawn(const TPosition &PawnPosition, const EType PromoteType);
+    void changeType(const TPosition &Piece, const EType Type);
 
     // get board
     const TSquareStatus* getBoard() const;
@@ -59,6 +59,11 @@ public:
     TPosition getKing(ETeam Team) const;
 
 private:
+    // update king pos
+    void updateKingPos();
+
+    TSquareStatus m_LastSquare[SQUARE_NUM];
+
     // all squares status
     TSquareStatus m_Square[SQUARE_NUM];
 

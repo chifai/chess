@@ -36,6 +36,9 @@ public:
     // get the piece of particular position
     TSquareStatus getPiece(const TPosition &Pos) const;
 
+    // get game state
+    EGameState getState() const;
+
     // is check?
     bool isCheck() const;
 

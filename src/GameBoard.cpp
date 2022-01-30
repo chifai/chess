@@ -100,8 +100,11 @@ void CGameBoard::tryMovePiece(const TPosition &From, const TPosition &To, TSquar
     Piece[From.to1D()] = {};
 }
 
-void CGameBoard::promotePawn(const TPosition &PawnPosition, const EType PromoteType)
+void CGameBoard::changeType(const TPosition &Piece, const EType Type)
 {
+    if (m_Square[Piece.to1D()].PieceType != Undef) {
+        m_Square[Piece.to1D()].PieceType = Type;
+    }
 }
 
 const TSquareStatus *CGameBoard::getBoard() const
@@ -116,6 +119,21 @@ TPosition CGameBoard::getKing(ETeam Team) const
         return {-1, -1};
     }
     return m_KingPos[Team];
+}
+
+void CGameBoard::updateKingPos() 
+{
+    int KingNum = 0;
+    for (int i = 0; i < SQUARE_NUM; i++) {
+        if (m_Square[i].PieceType == King) {
+            m_KingPos[m_Square[i].PieceTeam] = {i % BOARD_SIZE, i / BOARD_SIZE};
+            KingNum++;
+        }
+
+        if (KingNum == PLAYER_NUM) return;
+    }
+
+    assert(KingNum != 2);
 }
 
 TSquareStatus CGameBoard::operator[](const TPosition &Pos) const

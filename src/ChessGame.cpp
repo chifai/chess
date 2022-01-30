@@ -58,6 +58,25 @@ bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)
 
 bool CChessGame::promote(const TPosition &From, const EType PromoteType) 
 {
+    const TSquareStatus *pBoard = m_GameBoard.getBoard();
+    const int FromInd = From.to1D();
+
+    // check type
+    if (pBoard[FromInd].PieceType != Pawn) return false;
+
+    // check PromoteType
+    if (PromoteType == Pawn || PromoteType == King) return false;
+
+    // check gamestate
+    if ((m_GameState == WhitePromote && pBoard[FromInd].PieceTeam == White && From.y == BLACK_STARTROW) ||
+        (m_GameState == BlackPromote && pBoard[FromInd].PieceTeam == Black && From.y == WHITE_STARTROW)) {
+        m_GameBoard.changeType(From, PromoteType);
+
+        // change to move state
+        m_GameState = m_GameState == WhitePromote ? BlackMove : WhiteMove;
+        return true;
+    }
+
     return false;
 }
 
@@ -74,6 +93,11 @@ int CChessGame::getAttackers(const TPosition &Prey, const ETeam AttackerTeam, TP
 TSquareStatus CChessGame::getPiece(const TPosition &Pos) const
 {
     return m_GameBoard[Pos];
+}
+
+EGameState CChessGame::getState() const
+{
+    return m_GameState;
 }
 
 bool CChessGame::isCheck() const
@@ -143,8 +167,8 @@ bool CChessGame::isCorrectTeamToMove(const TPosition &From) const
 bool CChessGame::isPromotionRequired(const TPosition &Piece) const
 {
     if (m_GameBoard[Piece].PieceType != Pawn) return false;
-    if (m_GameBoard[Piece].PieceTeam == White && Piece.x == BLACK_STARTROW) return true;
-    if (m_GameBoard[Piece].PieceTeam == Black && Piece.x == WHITE_STARTROW) return true;
+    if (m_GameBoard[Piece].PieceTeam == White && Piece.y == BLACK_STARTROW) return true;
+    if (m_GameBoard[Piece].PieceTeam == Black && Piece.y == WHITE_STARTROW) return true;
 
     return false;
 }

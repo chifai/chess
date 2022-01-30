@@ -82,6 +82,27 @@ int main()
     printf("%d, ", Game.moveOnePiece({1, 6}, {3, 4}));  // bishop takes knight valid
     printf("\n");
 
+    printf("test pawn promotion\n");
+    printf("%d-%d, ", Game.moveOnePiece({2, 1}, {2, 3}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 6}, {2, 4}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 3}, {3, 4}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 4}, {2, 3}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({3, 4}, {3, 5}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({4, 6}, {4, 5}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({6, 1}, {6, 3}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 3}, {2, 2}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({3, 1}, {4, 0}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 2}, {2, 1}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({6, 3}, {6, 4}), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({2, 1}, {2, 0}), Game.getState());
+    printf("%d-%d, ", !Game.moveOnePiece({3, 0}, {3, 1}), Game.getState());
+    printf("%d-%d, ", !Game.moveOnePiece({5, 6}, {5, 5}), Game.getState());
+    printf("%d-%d, ", !Game.moveOnePiece({2, 1}, {2, 0}), Game.getState());
+    printf("%d-%d, ", !Game.promote({0, 6}, Knight), Game.getState());
+    printf("%d-%d, ", !Game.promote({2, 0}, King), Game.getState());
+    printf("%d-%d, ", Game.promote({2, 0}, Queen), Game.getState());
+    printf("%d-%d, ", Game.moveOnePiece({4, 2}, {4, 3}), Game.getState());
+
     printBoard(Game);
 
     // while(askValidMove(Game) == true) {}
@@ -114,7 +135,7 @@ void printBoard(const CChessGame &Game)
 {
     TPosition Pos;
     TSquareStatus Piece;
-    printf("----------\n");
+    printf("\n----------\n");
     for (int i = BOARD_SIZE - 1; i >= 0; i--) {
         printf("%d-| ", i);
         for (int j = 0; j < BOARD_SIZE; j++) {
