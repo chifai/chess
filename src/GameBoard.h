@@ -62,8 +62,6 @@ private:
     // update king pos
     void updateKingPos();
 
-    TSquareStatus m_LastSquare[SQUARE_NUM];
-
     // all squares status
     TSquareStatus m_Square[SQUARE_NUM];
 
