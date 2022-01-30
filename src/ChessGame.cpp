@@ -25,12 +25,6 @@ void CChessGame::init()
     m_MoveLog.clear();
 }
 
-bool CChessGame::isValidPieceMove(const TPosition &From, const TPosition &To) const
-{
-    const TSquareStatus *pBoard = m_GameBoard.getBoard();
-    return CChessRule::movePiece(pBoard, m_MoveLog, From, To);
-}
-
 bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)
 {
     // check if correct team to move under current game state
@@ -62,6 +56,11 @@ bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)
     return true;
 }
 
+bool CChessGame::promote(const TPosition &From, const EType PromoteType) 
+{
+    return false;
+}
+
 bool CChessGame::isSafePieceMove(const TPosition &From, const TPosition &To) const
 {
     return isValidPieceMove(From, To) && isKingSafeAfterMove(From, To);
@@ -77,9 +76,20 @@ TSquareStatus CChessGame::getPiece(const TPosition &Pos) const
     return m_GameBoard[Pos];
 }
 
+bool CChessGame::isCheck() const
+{
+    return false;
+}
+
 bool CChessGame::isCheckmate(ETeam Team) const
 {
     return false;
+}
+
+bool CChessGame::isValidPieceMove(const TPosition &From, const TPosition &To) const
+{
+    const TSquareStatus *pBoard = m_GameBoard.getBoard();
+    return CChessRule::movePiece(pBoard, m_MoveLog, From, To);
 }
 
 void CChessGame::addMove(const TPosition &From, const TPosition &To)
