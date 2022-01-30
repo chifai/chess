@@ -115,6 +115,24 @@ bool CChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveL
     return true;
 }
 
+bool CChessRule::movePiece(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To) 
+{
+    EType FromType = PiecePos[From.x * BOARD_SIZE + From.y].PieceType;
+    bool bValid;
+    switch (FromType) {
+    case Pawn: bValid = movePawn(PiecePos, Log, From, To); break;
+    case Bishop: bValid = moveBishop(PiecePos, From, To); break;
+    case Knight: bValid = moveKnight(PiecePos, From, To); break;
+    case Rook: bValid = moveRook(PiecePos, From, To); break;
+    case Queen: bValid = moveQueen(PiecePos, From, To); break;
+    case King: bValid = moveKing(PiecePos, Log, From, To); break;
+    case Undef: bValid = false; break;
+    default: bValid = false; assert(false); break;
+    }
+
+    return bValid;
+}
+
 bool CChessRule::isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece)
 {
     return false;

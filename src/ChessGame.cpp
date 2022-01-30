@@ -28,21 +28,7 @@ void CChessGame::init()
 bool CChessGame::isValidPieceMove(const TPosition &From, const TPosition &To) const
 {
     const TSquareStatus *pBoard = m_GameBoard.getBoard();
-    const int FromInd = From.x * BOARD_SIZE + From.y;
-    const EType FromType = pBoard[FromInd].PieceType;
-    bool bValid;
-
-    switch (FromType) {
-    case Pawn:      bValid = CChessRule::movePawn(pBoard, m_MoveLog, From, To); break;
-    case Knight:    bValid = CChessRule::moveKnight(pBoard, From, To); break;
-    case Bishop:    bValid = CChessRule::moveBishop(pBoard, From, To); break;
-    case Rook:      bValid = CChessRule::moveRook(pBoard, From, To); break;
-    case Queen:     bValid = CChessRule::moveQueen(pBoard, From, To); break;
-    case King:      bValid = CChessRule::moveKing(pBoard, m_MoveLog, From, To); break;
-    default:        bValid = false; assert(false); break;
-    }
-
-    return bValid;
+    return CChessRule::movePiece(pBoard, m_MoveLog, From, To);
 }
 
 bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)

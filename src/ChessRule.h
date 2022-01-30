@@ -9,6 +9,13 @@ using namespace Chess;
 
 class CChessRule {
 public:
+    // check piece move if valid, some requires MoveLog
+    static bool movePiece(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
+
+    // check if attacked
+    static bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece);
+
+private:
     // check pawn move if valid, en passant requires MoveLog
     static bool movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
 
@@ -27,10 +34,6 @@ public:
     // check king move if valid, castle requires MoveLog
     static bool moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To);
 
-    // check if attacked
-    static bool isAttacked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Piece);
-
-private:
     // check if any pieces blocked from two points
     static bool isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &From, const TPosition &To);
 
