@@ -64,7 +64,7 @@ bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)
 
 bool CChessGame::isSafePieceMove(const TPosition &From, const TPosition &To) const
 {
-    return isValidPieceMove(From, To) && isKingAttackedAfterMove(From, To);
+    return isValidPieceMove(From, To) && isKingSafeAfterMove(From, To);
 }
 
 int CChessGame::getAttackers(const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM]) const
@@ -87,20 +87,29 @@ void CChessGame::addMove(const TPosition &From, const TPosition &To)
     
 }
 
-bool CChessGame::isKingAttackedAfterMove(const TPosition &From, const TPosition &To) const
+bool CChessGame::isKingSafeAfterMove(const TPosition &From, const TPosition &To) const
 {
     // get FromTeam
     ETeam FromTeam = m_GameBoard[From].PieceTeam;
+    ETeam AttackerTeam = FromTeam == White ? Black : White;
 
     // try move a piece
     TSquareStatus TryPiece[SQUARE_NUM];
     m_GameBoard.tryMovePiece(From, To, TryPiece);
 
     // get king position
-    TPosition KingPos = m_GameBoard.getKing(FromTeam);
+    TPosition KingPos;
+    if (TryPiece[To.to1D()].PieceType == King) {
+        // move king at this case
+        KingPos = To;
+    }
+    else {
+        // if king is not moved, get the king from GameBoard
+        KingPos = m_GameBoard.getKing(FromTeam);
+    }
 
     // return true if the king is not attacked
-    return !CChessRule::isAttacked(TryPiece, KingPos, FromTeam == White ? Black : White);
+    return !CChessRule::isAttacked(TryPiece, KingPos, AttackerTeam);
 }
 
 bool CChessGame::isCorrectTeamToMove(const TPosition &From) const

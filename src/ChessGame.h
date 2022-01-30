@@ -50,7 +50,7 @@ private:
     void addMove(const TPosition &From, const TPosition &To);
 
     // try a move to see if king will be attacked
-    bool isKingAttackedAfterMove(const TPosition &From, const TPosition &To) const;
+    bool isKingSafeAfterMove(const TPosition &From, const TPosition &To) const;
 
     // check if the piece trying to move is from correct team
     bool isCorrectTeamToMove(const TPosition &From) const;

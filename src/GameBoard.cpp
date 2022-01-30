@@ -1,4 +1,5 @@
 #include "GameBoard.h"
+#include <cassert>
 #include <cstring>
 
 CGameBoard::CGameBoard()
@@ -28,9 +29,6 @@ void CGameBoard::updatePiecePos()
 
 void CGameBoard::resetPiece()
 {
-    // reset
-    memset(m_Square, 0, sizeof(m_Square));
-
     // assign White pieces, set the start index
     int Index = 0;
 
@@ -76,17 +74,30 @@ void CGameBoard::resetPiece()
     m_Square[Index++].PieceType = Bishop;
     m_Square[Index++].PieceType = Knight;
     m_Square[Index++].PieceType = Rook;
+
+    // reset king position
+    m_KingPos[White] = {0, 4};
+    m_KingPos[Black] = {7, 4};
 }
 
 void CGameBoard::movePiece(const TPosition &From, const TPosition &To)
 {
-    m_Square[To.to1D()] = m_Square[From.to1D()];
-    m_Square[From.to1D()] = {};
+    int FromInd = From.to1D();
+    int ToInd = To.to1D();
+    m_Square[ToInd] = m_Square[FromInd];
+    m_Square[FromInd] = {};
+
+    // record the king position if it moves
+    if (m_Square[ToInd].PieceType == King) {
+        m_KingPos[m_Square[ToInd].PieceTeam] = To;
+    }
 }
 
 void CGameBoard::tryMovePiece(const TPosition &From, const TPosition &To, TSquareStatus Piece[]) const
 {
-    
+    memcpy(Piece, m_Square, sizeof(m_Square));
+    Piece[To.to1D()] = m_Square[From.to1D()];
+    Piece[From.to1D()] = {};
 }
 
 void CGameBoard::promotePawn(const TPosition &PawnPosition, const EType PromoteType)
@@ -100,11 +111,14 @@ const TSquareStatus *CGameBoard::getBoard() const
 
 TPosition CGameBoard::getKing(ETeam Team) const
 {
-    return {0, 0};
+    if (Team == None) {
+        assert(false);
+        return {-1, -1};
+    }
+    return m_KingPos[Team];
 }
 
 TSquareStatus CGameBoard::operator[](const TPosition &Pos) const
 {
     return m_Square[Pos.to1D()];
 }
-

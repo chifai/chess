@@ -54,13 +54,13 @@ namespace Chess {
     };
 
     enum ETeam {
-        None = 0,
-        White,
-        Black,
+        None = -1,
+        White = 0,
+        Black = 1,
     };
 
     enum EType {
-        Undef = 0,
+        Undef = -1,
         Pawn,
         Knight,
         Bishop,

@@ -23,8 +23,8 @@ int main()
     printf("\n");
 
     printf("invalid pawn move: ");
-    printf("%d, ", Game.moveOnePiece({0, 1}, {1, 2}));  // invalid
-    printf("%d, ", Game.moveOnePiece({0, 6}, {0, 4}));  // invalid
+    printf("%d, ", !Game.moveOnePiece({0, 1}, {1, 2}));  // invalid
+    printf("%d, ", !Game.moveOnePiece({0, 6}, {0, 4}));  // invalid
     printf("\n");
 
     printf("test bishop: ");
@@ -36,7 +36,7 @@ int main()
     printf("test Rook: ");
     printf("%d, ", Game.moveOnePiece({0, 7}, {2, 7}));
     printf("%d, ", Game.moveOnePiece({0, 0}, {1, 0}));
-    printf("%d, ", Game.moveOnePiece({2, 7}, {2, 6}));  // invalid
+    printf("%d, ", !Game.moveOnePiece({2, 7}, {2, 6}));  // invalid
     printf("%d, ", Game.moveOnePiece({2, 7}, {1, 7}));
     printf("%d, ", Game.moveOnePiece({1, 0}, {1, 1}));
     printf("\n");
@@ -45,8 +45,8 @@ int main()
     printf("test queen: ");
     printf("%d, ", Game.moveOnePiece({3, 7}, {4, 6}));
     printf("%d, ", Game.moveOnePiece({3, 1}, {3, 3}));
-    printf("%d, ", Game.moveOnePiece({4, 6}, {3, 3}));  // invalid
-    printf("%d, ", Game.moveOnePiece({3, 0}, {7, 4}));  // invalid
+    printf("%d, ", !Game.moveOnePiece({4, 6}, {3, 3}));  // invalid
+    printf("%d, ", !Game.moveOnePiece({3, 0}, {7, 4}));  // invalid
     printf("%d, ", Game.moveOnePiece({4, 6}, {4, 2}));
     printf("\n");
 
@@ -73,6 +73,14 @@ int main()
     Attacker[1].x, Attacker[1].y,
     Attacker[2].x, Attacker[2].y
     );
+
+    printf("test king valid move\n");
+    printf("%d, ", Game.moveOnePiece({0, 5}, {1, 3}));
+    printf("%d, ", !Game.moveOnePiece({3, 1}, {3, 2}));  // invalid king move
+    printf("%d, ", Game.moveOnePiece({2, 2}, {3, 4}));
+    printf("%d, ", !Game.moveOnePiece({2, 6}, {2, 5}));  // invalid move, king is checked
+    printf("%d, ", Game.moveOnePiece({1, 6}, {3, 4}));  // bishop takes knight valid
+    printf("\n");
 
     printBoard(Game);
 
@@ -106,8 +114,9 @@ void printBoard(const CChessGame &Game)
 {
     TPosition Pos;
     TSquareStatus Piece;
+    printf("----------\n");
     for (int i = BOARD_SIZE - 1; i >= 0; i--) {
-        printf("| ");
+        printf("%d-| ", i);
         for (int j = 0; j < BOARD_SIZE; j++) {
             Pos.x = j;
             Pos.y = i;
@@ -118,6 +127,7 @@ void printBoard(const CChessGame &Game)
         }
         printf("\n");
     }
+    printf("--| 0------- | 1------- | 2------- | 3------- | 4------- | 5------- | 6------- | 7------- |\n");
 }
 
 void printPieceName(const TSquareStatus &pPiece)

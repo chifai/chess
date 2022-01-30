@@ -64,5 +64,8 @@ private:
 
     // player pieces
     TPlayerPiece m_PlayerPiece[PLAYER_NUM];
+
+    // king position
+    TPosition m_KingPos[PLAYER_NUM];
 };
 #endif // !defined(_GAMEBOARD_H__INCLUDED_)
