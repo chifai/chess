@@ -80,8 +80,8 @@ void CGameBoard::resetPiece()
 
 void CGameBoard::movePiece(const TPosition &From, const TPosition &To)
 {
-    m_Square[ To.x * BOARD_SIZE + To.y ] = m_Square[ From.x * BOARD_SIZE + From.y ];
-    m_Square[ From.x * BOARD_SIZE + From.y ] = {};
+    m_Square[To.y * BOARD_SIZE + To.x] = m_Square[From.y * BOARD_SIZE + From.x];
+    m_Square[From.y * BOARD_SIZE + From.x] = {};
 }
 
 void CGameBoard::tryMovePiece(const TPosition &From, const TPosition &To, TSquareStatus Piece[]) const
@@ -105,6 +105,6 @@ TPosition CGameBoard::getKing(ETeam Team) const
 
 TSquareStatus CGameBoard::operator[](const TPosition &Pos) const
 {
-    return m_Square[Pos.x * BOARD_SIZE + Pos.y];
+    return m_Square[Pos.y * BOARD_SIZE + Pos.x];
 }
 
