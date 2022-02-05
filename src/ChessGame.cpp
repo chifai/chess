@@ -16,7 +16,7 @@ CChessGame::~CChessGame()
 void CChessGame::init()
 {
     // reset the state as white move
-    m_GameState = WhiteMove;
+    m_GameState = EGameState::WhiteMove;
 
     // reset piece positions
     m_GameBoard.resetPiece();
@@ -41,18 +41,18 @@ bool CChessGame::moveOnePiece(const TPosition &From, const TPosition &To)
 
     // check if promotion required
     if (isPromotionRequired(To)) {
-        m_GameState = m_GameState == WhiteMove ? WhitePromote : BlackPromote;
+        m_GameState = m_GameState == EGameState::WhiteMove ? EGameState::WhitePromote : EGameState::BlackPromote;
         return true;
     }
 
     // check if checkmate
     if (isCheckmate(m_GameBoard[From].PieceTeam)) {
-        m_GameState = m_GameState == WhiteMove ? WhiteCheckmate : BlackCheckmate;
+        m_GameState = m_GameState == EGameState::WhiteMove ? EGameState::WhiteCheckmate : EGameState::BlackCheckmate;
         return true;
     }
 
     // to next opponent move
-    m_GameState = m_GameState == WhiteMove ? BlackMove : WhiteMove;
+    m_GameState = m_GameState == EGameState::WhiteMove ? EGameState::BlackMove : EGameState::WhiteMove;
     return true;
 }
 
@@ -62,18 +62,18 @@ bool CChessGame::promote(const TPosition &From, const EType PromoteType)
     const int FromInd = From.to1D();
 
     // check type
-    if (pBoard[FromInd].PieceType != Pawn) return false;
+    if (pBoard[FromInd].PieceType != EType::Pawn) return false;
 
     // check PromoteType
-    if (PromoteType == Pawn || PromoteType == King) return false;
+    if (PromoteType == EType::Pawn || PromoteType == EType::King) return false;
 
     // check gamestate
-    if ((m_GameState == WhitePromote && pBoard[FromInd].PieceTeam == White && From.y == BLACK_STARTROW) ||
-        (m_GameState == BlackPromote && pBoard[FromInd].PieceTeam == Black && From.y == WHITE_STARTROW)) {
+    if ((m_GameState == EGameState::WhitePromote && pBoard[FromInd].PieceTeam == ETeam::White && From.y == BLACK_STARTROW) ||
+        (m_GameState == EGameState::BlackPromote && pBoard[FromInd].PieceTeam == ETeam::Black && From.y == WHITE_STARTROW)) {
         m_GameBoard.changeType(From, PromoteType);
 
         // change to move state
-        m_GameState = m_GameState == WhitePromote ? BlackMove : WhiteMove;
+        m_GameState = m_GameState == EGameState::WhitePromote ? EGameState::BlackMove : EGameState::WhiteMove;
         return true;
     }
 
@@ -125,7 +125,7 @@ bool CChessGame::isKingSafeAfterMove(const TPosition &From, const TPosition &To)
 {
     // get FromTeam
     ETeam FromTeam = m_GameBoard[From].PieceTeam;
-    ETeam AttackerTeam = FromTeam == White ? Black : White;
+    ETeam AttackerTeam = FromTeam == ETeam::White ? ETeam::Black : ETeam::White;
 
     // try move a piece
     TSquareStatus TryPiece[SQUARE_NUM];
@@ -133,7 +133,7 @@ bool CChessGame::isKingSafeAfterMove(const TPosition &From, const TPosition &To)
 
     // get king position
     TPosition KingPos;
-    if (TryPiece[To.to1D()].PieceType == King) {
+    if (TryPiece[To.to1D()].PieceType == EType::King) {
         // move king at this case
         KingPos = To;
     }
@@ -150,14 +150,14 @@ bool CChessGame::isCorrectTeamToMove(const TPosition &From) const
 {
     // check gamestate
     switch (m_GameBoard[From].PieceTeam) {
-    case None:
+    case ETeam::None:
         return false;
 
-    case White:
-        return m_GameState == WhiteMove;
+    case ETeam::White:
+        return m_GameState == EGameState::WhiteMove;
 
-    case Black:
-        return m_GameState == BlackMove;
+    case ETeam::Black:
+        return m_GameState == EGameState::BlackMove;
     }
 
     assert(false);
@@ -166,9 +166,9 @@ bool CChessGame::isCorrectTeamToMove(const TPosition &From) const
 
 bool CChessGame::isPromotionRequired(const TPosition &Piece) const
 {
-    if (m_GameBoard[Piece].PieceType != Pawn) return false;
-    if (m_GameBoard[Piece].PieceTeam == White && Piece.y == BLACK_STARTROW) return true;
-    if (m_GameBoard[Piece].PieceTeam == Black && Piece.y == WHITE_STARTROW) return true;
+    if (m_GameBoard[Piece].PieceType != EType::Pawn) return false;
+    if (m_GameBoard[Piece].PieceTeam == ETeam::White && Piece.y == BLACK_STARTROW) return true;
+    if (m_GameBoard[Piece].PieceTeam == ETeam::Black && Piece.y == WHITE_STARTROW) return true;
 
     return false;
 }

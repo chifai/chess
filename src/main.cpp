@@ -61,13 +61,13 @@ int main()
     int AttackerNum;
 
     memset(Attacker, 0, sizeof(Attacker));
-    AttackerNum = Game.getAttackers({3, 4}, Black, Attacker);
+    AttackerNum = Game.getAttackers({3, 4}, ETeam::Black, Attacker);
     printf("%d, {%d, %d}\n", AttackerNum, Attacker[0].x, Attacker[0].y);
     memset(Attacker, 0, sizeof(Attacker));
-    AttackerNum = Game.getAttackers({1, 4}, White, Attacker);
+    AttackerNum = Game.getAttackers({1, 4}, ETeam::White, Attacker);
     printf("%d, {%d, %d}\n", AttackerNum, Attacker[0].x, Attacker[0].y);
     memset(Attacker, 0, sizeof(Attacker));
-    AttackerNum = Game.getAttackers({2, 1}, White, Attacker);
+    AttackerNum = Game.getAttackers({2, 1}, ETeam::White, Attacker);
     printf("%d, {%d, %d}, {%d, %d}, {%d, %d}\n", AttackerNum,
     Attacker[0].x, Attacker[0].y,
     Attacker[1].x, Attacker[1].y,
@@ -98,9 +98,9 @@ int main()
     printf("%d-%d, ", !Game.moveOnePiece({3, 0}, {3, 1}), Game.getState());
     printf("%d-%d, ", !Game.moveOnePiece({5, 6}, {5, 5}), Game.getState());
     printf("%d-%d, ", !Game.moveOnePiece({2, 1}, {2, 0}), Game.getState());
-    printf("%d-%d, ", !Game.promote({0, 6}, Knight), Game.getState());
-    printf("%d-%d, ", !Game.promote({2, 0}, King), Game.getState());
-    printf("%d-%d, ", Game.promote({2, 0}, Queen), Game.getState());
+    printf("%d-%d, ", !Game.promote({0, 6}, EType::Knight), Game.getState());
+    printf("%d-%d, ", !Game.promote({2, 0}, EType::King), Game.getState());
+    printf("%d-%d, ", Game.promote({2, 0}, EType::Queen), Game.getState());
     printf("%d-%d, ", Game.moveOnePiece({4, 2}, {4, 3}), Game.getState());
 
     printBoard(Game);
@@ -153,13 +153,13 @@ void printBoard(const CChessGame &Game)
 
 void printPieceName(const TSquareStatus &pPiece)
 {
-    if (pPiece.PieceTeam == None) {
+    if (pPiece.PieceTeam == ETeam::None) {
         printf("----    ");
         return;
     }
 
     // print team
-    if (pPiece.PieceTeam == White) {
+    if (pPiece.PieceTeam == ETeam::White) {
         printf("W.");
     }
     else {

@@ -53,13 +53,13 @@ namespace Chess {
         }
     };
 
-    enum ETeam {
+    enum class ETeam {
         None = -1,
         White = 0,
         Black = 1,
     };
 
-    enum EType {
+    enum class EType{
         Undef = -1,
         Pawn,
         Knight,
@@ -69,7 +69,7 @@ namespace Chess {
         King,
     };
 
-    enum EGameState {
+    enum class EGameState {
         WhiteMove = 0,
         WhitePromote,
         WhiteCheckmate,
@@ -81,7 +81,7 @@ namespace Chess {
     };
 
     struct TMoveLog {
-        enum EMoveType {
+        enum class EMoveType {
             Normal,
             QueenCastle,
             KingCastle,
@@ -107,13 +107,13 @@ namespace Chess {
         EType PieceType;
 
         TSquareStatus() {
-            PieceTeam = None;
-            PieceType = Undef;
+            PieceTeam = ETeam::None;
+            PieceType = EType::Undef;
         }
 
         bool isOccupied() const
         {
-            return PieceTeam != None;
+            return PieceTeam != ETeam::None;
         }
     };
 

@@ -5,28 +5,28 @@
 bool CChessRule::movePawn(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveLog &Log, const TPosition &From, const TPosition &To)
 {
     // check type
-    if (PiecePos[From.to1D()].PieceType != Pawn) return false;
+    if (PiecePos[From.to1D()].PieceType != EType::Pawn) return false;
 
     ETeam FromTeam = PiecePos[From.to1D()].PieceTeam;
-    ETeam OppoTeam = FromTeam == White ? Black : White;
+    ETeam OppoTeam = FromTeam == ETeam::White ? ETeam::Black : ETeam::White;
     TSquareStatus ToSquare = PiecePos[To.to1D()];
     // if pawn move one step forward
-    if ((FromTeam == White && From.y + 1 == To.y) || (FromTeam == Black && From.y - 1 == To.y)) {
+    if ((FromTeam == ETeam::White && From.y + 1 == To.y) || (FromTeam == ETeam::Black && From.y - 1 == To.y)) {
         // if go straight, no piece should be at target position
-        if (From.x == To.x && ToSquare.PieceTeam == None) return true;
+        if (From.x == To.x && ToSquare.PieceTeam == ETeam::None) return true;
         // if go sideway, should be a capture
         if (abs(From.x - To.x) == 1 && ToSquare.PieceTeam == OppoTeam) return true;
         // #TODO: check sideway en passant
         // else return false
         return false;
     }
-    else if (FromTeam == White && From.y == 1 && To.y == 3) {
+    else if (FromTeam == ETeam::White && From.y == 1 && To.y == 3) {
         // white pawn moves two steps forward condition
-        return From.x == To.x && ToSquare.PieceTeam == None && isBlocked(PiecePos, From, To) == false;
+        return From.x == To.x && ToSquare.PieceTeam == ETeam::None && isBlocked(PiecePos, From, To) == false;
     }
-    else if (FromTeam == Black && From.y == 6 && To.y == 4) {
+    else if (FromTeam == ETeam::Black && From.y == 6 && To.y == 4) {
         // black pawn moves two steps forward condition
-        return From.x == To.x && ToSquare.PieceTeam == None && isBlocked(PiecePos, From, To) == false;
+        return From.x == To.x && ToSquare.PieceTeam == ETeam::None && isBlocked(PiecePos, From, To) == false;
     }
 
     return false;
@@ -36,7 +36,7 @@ bool CChessRule::moveBishop(const TSquareStatus PiecePos[SQUARE_NUM], const TPos
 {
     TSquareStatus SqFrom = PiecePos[From.to1D()];
     // check type
-    if (SqFrom.PieceType != Bishop) return false;
+    if (SqFrom.PieceType != EType::Bishop) return false;
 
     // check if diagonal move
     if (!isDiagonalMove(From, To)) return false;
@@ -52,7 +52,7 @@ bool CChessRule::moveKnight(const TSquareStatus PiecePos[SQUARE_NUM], const TPos
 {
     TSquareStatus SqFrom = PiecePos[From.to1D()];
     // check type
-    if (SqFrom.PieceType != Knight) return false;
+    if (SqFrom.PieceType != EType::Knight) return false;
 
     // check target position is not friendly
     if (PiecePos[To.to1D()].PieceTeam == SqFrom.PieceTeam) return false;
@@ -68,7 +68,7 @@ bool CChessRule::moveRook(const TSquareStatus PiecePos[SQUARE_NUM], const TPosit
 {
     TSquareStatus SqFrom = PiecePos[From.to1D()];
     // check type
-    if (SqFrom.PieceType != Rook) return false;
+    if (SqFrom.PieceType != EType::Rook) return false;
 
     // check if diagonal move
     if (!isStraightMove(From, To)) return false;
@@ -84,7 +84,7 @@ bool CChessRule::moveQueen(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
 {
     TSquareStatus SqFrom = PiecePos[From.to1D()];
     // check type
-    if (SqFrom.PieceType != Queen) return false;
+    if (SqFrom.PieceType != EType::Queen) return false;
 
     // check if octal move
     if (!isOctalMove(From, To)) return false;
@@ -100,7 +100,7 @@ bool CChessRule::moveKing(const TSquareStatus PiecePos[SQUARE_NUM], const CMoveL
 {
     TSquareStatus SqFrom = PiecePos[From.to1D()];
     // check type
-    if (SqFrom.PieceType != King) return false;
+    if (SqFrom.PieceType != EType::King) return false;
 
     // #TODO: check castle rule
 
@@ -120,13 +120,13 @@ bool CChessRule::movePiece(const TSquareStatus PiecePos[SQUARE_NUM], const CMove
     EType FromType = PiecePos[From.to1D()].PieceType;
     bool bValid;
     switch (FromType) {
-    case Pawn: bValid = movePawn(PiecePos, Log, From, To); break;
-    case Bishop: bValid = moveBishop(PiecePos, From, To); break;
-    case Knight: bValid = moveKnight(PiecePos, From, To); break;
-    case Rook: bValid = moveRook(PiecePos, From, To); break;
-    case Queen: bValid = moveQueen(PiecePos, From, To); break;
-    case King: bValid = moveKing(PiecePos, Log, From, To); break;
-    case Undef: bValid = false; break;
+    case EType::Pawn: bValid = movePawn(PiecePos, Log, From, To); break;
+    case EType::Bishop: bValid = moveBishop(PiecePos, From, To); break;
+    case EType::Knight: bValid = moveKnight(PiecePos, From, To); break;
+    case EType::Rook: bValid = moveRook(PiecePos, From, To); break;
+    case EType::Queen: bValid = moveQueen(PiecePos, From, To); break;
+    case EType::King: bValid = moveKing(PiecePos, Log, From, To); break;
+    case EType::Undef: bValid = false; break;
     default: bValid = false; assert(false); break;
     }
 
@@ -174,7 +174,7 @@ bool CChessRule::isBlocked(const TSquareStatus PiecePos[SQUARE_NUM], const TPosi
     for (int i = 0; i < StepNumBetween; i++) {
         CurPos.y += RowStep;
         CurPos.x += ColStep;
-        if (PiecePos[CurPos.to1D()].PieceTeam != None) return true;
+        if (PiecePos[CurPos.to1D()].PieceTeam != ETeam::None) return true;
     }
 
     return false;
@@ -216,23 +216,23 @@ bool CChessRule::isAttackSuccess(const TSquareStatus PiecePos[SQUARE_NUM], const
     int xDiff = Predator.x - Prey.x;
     int yDiff = Predator.y - Prey.y;
     switch (PredatorSq.PieceType) {
-    case Pawn:
+    case EType::Pawn:
         if (abs(xDiff) != 1) return false;
-        return PredatorSq.PieceTeam == White ? yDiff == -1 : yDiff== 1;
+        return PredatorSq.PieceTeam == ETeam::White ? yDiff == -1 : yDiff== 1;
 
-    case Knight:
+    case EType::Knight:
         return (abs(xDiff) == 2 && abs(yDiff) == 1) || (abs(xDiff) == 1 && abs(yDiff) == 2);
 
-    case Bishop:
+    case EType::Bishop:
         return abs(xDiff) == abs(yDiff);
 
-    case Rook:
+    case EType::Rook:
         return xDiff * yDiff == 0;
 
-    case Queen:
+    case EType::Queen:
         return abs(xDiff) == abs(yDiff) || xDiff * yDiff == 0;
 
-    case King:
+    case EType::King:
         return abs(xDiff) <= 1 && abs(yDiff) <= 1;
 
     default:
@@ -244,7 +244,7 @@ bool CChessRule::isAttackSuccess(const TSquareStatus PiecePos[SQUARE_NUM], const
 
 int CChessRule::getPossibleAttackers(const TSquareStatus PiecePos[SQUARE_NUM], const TPosition &Prey, const ETeam AttackerTeam, TPosition Attacker[PIECE_NUM])
 {
-    ETeam DefenserTeam = AttackerTeam == White ? Black : White;
+    ETeam DefenserTeam = AttackerTeam == ETeam::White ? ETeam::Black : ETeam::White;
     TPosition Predator;
 
     // move one step each time at different direction to find out if there is opponent piece and correct piece type

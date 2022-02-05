@@ -29,27 +29,27 @@ void CGameBoard::updatePiecePos()
 
 void CGameBoard::resetPiece()
 {
-    // assign White pieces, set the start index
+    // assign ETeam::White pieces, set the start index
     int Index = 0;
 
     // assign team
     for (int j = 0; j < PLAYER_PIECE_NUM; j++) {
-        m_Square[Index + j].PieceTeam = White;
+        m_Square[Index + j].PieceTeam = ETeam::White;
     }
 
     // assign pieces besides pawns
-    m_Square[Index++].PieceType = Rook;
-    m_Square[Index++].PieceType = Knight;
-    m_Square[Index++].PieceType = Bishop;
-    m_Square[Index++].PieceType = Queen;
-    m_Square[Index++].PieceType = King;
-    m_Square[Index++].PieceType = Bishop;
-    m_Square[Index++].PieceType = Knight;
-    m_Square[Index++].PieceType = Rook;
+    m_Square[Index++].PieceType = EType::Rook;
+    m_Square[Index++].PieceType = EType::Knight;
+    m_Square[Index++].PieceType = EType::Bishop;
+    m_Square[Index++].PieceType = EType::Queen;
+    m_Square[Index++].PieceType = EType::King;
+    m_Square[Index++].PieceType = EType::Bishop;
+    m_Square[Index++].PieceType = EType::Knight;
+    m_Square[Index++].PieceType = EType::Rook;
 
     // assign pawns
     for (int j = 0; j < PAWN_NUM; j++) {
-        m_Square[Index++].PieceType = Pawn;
+        m_Square[Index++].PieceType = EType::Pawn;
     }
 
     // assign black pieces, reset the starting index
@@ -57,27 +57,27 @@ void CGameBoard::resetPiece()
 
     // assign team
     for (int j = 0; j < PLAYER_PIECE_NUM; j++) {
-        m_Square[Index + j].PieceTeam = Black;
+        m_Square[Index + j].PieceTeam = ETeam::Black;
     }
 
     // assign pawns
     for (int j = 0; j < PAWN_NUM; j++) {
-        m_Square[Index++].PieceType = Pawn;
+        m_Square[Index++].PieceType = EType::Pawn;
     }
 
     // assign pieces besides pawns
-    m_Square[Index++].PieceType = Rook;
-    m_Square[Index++].PieceType = Knight;
-    m_Square[Index++].PieceType = Bishop;
-    m_Square[Index++].PieceType = Queen;
-    m_Square[Index++].PieceType = King;
-    m_Square[Index++].PieceType = Bishop;
-    m_Square[Index++].PieceType = Knight;
-    m_Square[Index++].PieceType = Rook;
+    m_Square[Index++].PieceType = EType::Rook;
+    m_Square[Index++].PieceType = EType::Knight;
+    m_Square[Index++].PieceType = EType::Bishop;
+    m_Square[Index++].PieceType = EType::Queen;
+    m_Square[Index++].PieceType = EType::King;
+    m_Square[Index++].PieceType = EType::Bishop;
+    m_Square[Index++].PieceType = EType::Knight;
+    m_Square[Index++].PieceType = EType::Rook;
 
     // reset king position
-    m_KingPos[White] = {0, 4};
-    m_KingPos[Black] = {7, 4};
+    m_KingPos[(int)ETeam::White] = {0, 4};
+    m_KingPos[(int)ETeam::Black] = {7, 4};
 }
 
 void CGameBoard::movePiece(const TPosition &From, const TPosition &To)
@@ -88,8 +88,8 @@ void CGameBoard::movePiece(const TPosition &From, const TPosition &To)
     m_Square[FromInd] = {};
 
     // record the king position if it moves
-    if (m_Square[ToInd].PieceType == King) {
-        m_KingPos[m_Square[ToInd].PieceTeam] = To;
+    if (m_Square[ToInd].PieceType == EType::King) {
+        m_KingPos[(int)m_Square[ToInd].PieceTeam] = To;
     }
 }
 
@@ -102,7 +102,7 @@ void CGameBoard::tryMovePiece(const TPosition &From, const TPosition &To, TSquar
 
 void CGameBoard::changeType(const TPosition &Piece, const EType Type)
 {
-    if (m_Square[Piece.to1D()].PieceType != Undef) {
+    if (m_Square[Piece.to1D()].PieceType != EType::Undef) {
         m_Square[Piece.to1D()].PieceType = Type;
     }
 }
@@ -114,19 +114,19 @@ const TSquareStatus *CGameBoard::getBoard() const
 
 TPosition CGameBoard::getKing(ETeam Team) const
 {
-    if (Team == None) {
+    if (Team == ETeam::None) {
         assert(false);
         return {-1, -1};
     }
-    return m_KingPos[Team];
+    return m_KingPos[(int)Team];
 }
 
 void CGameBoard::updateKingPos() 
 {
     int KingNum = 0;
     for (int i = 0; i < SQUARE_NUM; i++) {
-        if (m_Square[i].PieceType == King) {
-            m_KingPos[m_Square[i].PieceTeam] = {i % BOARD_SIZE, i / BOARD_SIZE};
+        if (m_Square[i].PieceType == EType::King) {
+            m_KingPos[(int)m_Square[i].PieceTeam] = {i % BOARD_SIZE, i / BOARD_SIZE};
             KingNum++;
         }
 
