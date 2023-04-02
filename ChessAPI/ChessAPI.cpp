@@ -8,9 +8,15 @@ void ChessAPI::resetBoard()
     g_ChessGame.init();
 }
 
-bool ChessAPI::moveOnePiece(const Chess::TPosition& From, const Chess::TPosition& To)
+bool ChessAPI::moveOnePiece(const int FromInd, const int ToInd)
 {
-    return g_ChessGame.moveOnePiece(From, To);
+    TPosition FromPos, ToPos;
+    FromPos.x = FromInd % BOARD_SIZE;
+    FromPos.y = FromInd / BOARD_SIZE;
+    ToPos.x = ToInd % BOARD_SIZE;
+    ToPos.y = ToInd / BOARD_SIZE;
+
+    return g_ChessGame.moveOnePiece(FromPos, ToPos);
 }
 
 bool ChessAPI::promote(const Chess::TPosition & From, const Chess::EType PromoteType)
@@ -33,9 +39,18 @@ int ChessAPI::getAttackers(const Chess::TPosition& Prey, const Chess::ETeam Atta
 //    return g_ChessGame.showAllValidMoves(From, ValidDest);
 // }
 
-void ChessAPI::getPiece(const Chess::TPosition& Pos, Chess::TSquareStatus &SquareStatus)
+EPieceType ChessAPI::getPiece(const int PosInd)
 {
-    SquareStatus = g_ChessGame.getPiece(Pos);
+    TPosition Pos;
+    Pos.x = PosInd % BOARD_SIZE;
+    Pos.y = PosInd / BOARD_SIZE;
+    TSquareStatus SqStatus = g_ChessGame.getPiece(Pos);
+
+    if (SqStatus.isOccupied() == false) {
+        return EPieceType::None;
+    }
+
+    return (EPieceType)(((int)SqStatus.PieceType + 1) + ((int)SqStatus.PieceTeam * 6));
 }
 
 Chess::EGameState ChessAPI::getState()

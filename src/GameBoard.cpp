@@ -52,6 +52,12 @@ void CGameBoard::resetPiece()
         m_Square[Index++].PieceType = EType::Pawn;
     }
 
+    // assign empty squares
+    for (int j = 0; j < 32; j++) {
+        m_Square[Index++].PieceTeam = ETeam::None;
+        m_Square[Index++].PieceType = EType::Undef;
+    }
+
     // assign black pieces, reset the starting index
     Index = BOARD_SIZE * 6;
 
@@ -76,8 +82,8 @@ void CGameBoard::resetPiece()
     m_Square[Index++].PieceType = EType::Rook;
 
     // reset king position
-    m_KingPos[(int)ETeam::White] = {0, 4};
-    m_KingPos[(int)ETeam::Black] = {7, 4};
+    m_KingPos[(int)ETeam::White] = {4, 0};
+    m_KingPos[(int)ETeam::Black] = {4, 7};
 }
 
 void CGameBoard::movePiece(const TPosition &From, const TPosition &To)

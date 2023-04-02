@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace ChessGame
 {
     public partial class ChessBoard : Form
@@ -17,6 +19,16 @@ namespace ChessGame
         int m_ChessButtonStartInd;
         int m_ValidStartPieceInd;
         int[] m_PieceType = new int[SQUARE_NUM];
+        int m_GameState;
+
+        [DllImport("ChessAPI.dll")]
+        private static extern void resetBoard();
+        [DllImport("ChessAPI.dll")]
+        private static extern bool moveOnePiece(int From, int To);
+        [DllImport("ChessAPI.dll")]
+        private static extern int getPiece(int PosInd);
+        [DllImport("ChessAPI.dll")]
+        private static extern int getState();
 
         private enum EPlayerType : int
         {
@@ -40,7 +52,6 @@ namespace ChessGame
             B_Queen,
             B_King,
         }
-
 
         public ChessBoard()
         {
@@ -100,32 +111,34 @@ namespace ChessGame
 
         private void resetChessBoard()
         {
-            int Index = 0;
+            //int Index = 0;
 
-            // assign white pieces
-            m_PieceType[Index++] = (int)EPieceType.W_Rook;
-            m_PieceType[Index++] = (int)EPieceType.W_Knight;
-            m_PieceType[Index++] = (int)EPieceType.W_Bishop;
-            m_PieceType[Index++] = (int)EPieceType.W_Queen;
-            m_PieceType[Index++] = (int)EPieceType.W_King;
-            m_PieceType[Index++] = (int)EPieceType.W_Bishop;
-            m_PieceType[Index++] = (int)EPieceType.W_Knight;
-            m_PieceType[Index++] = (int)EPieceType.W_Rook;
-            for (int i = 0; i < 8; i++) m_PieceType[Index++] = (int)EPieceType.W_Pawn;
+            //// assign white pieces
+            //m_PieceType[Index++] = (int)EPieceType.W_Rook;
+            //m_PieceType[Index++] = (int)EPieceType.W_Knight;
+            //m_PieceType[Index++] = (int)EPieceType.W_Bishop;
+            //m_PieceType[Index++] = (int)EPieceType.W_Queen;
+            //m_PieceType[Index++] = (int)EPieceType.W_King;
+            //m_PieceType[Index++] = (int)EPieceType.W_Bishop;
+            //m_PieceType[Index++] = (int)EPieceType.W_Knight;
+            //m_PieceType[Index++] = (int)EPieceType.W_Rook;
+            //for (int i = 0; i < 8; i++) m_PieceType[Index++] = (int)EPieceType.W_Pawn;
 
-            // assign black pieces
-            for (int i = 0; i < 32; i++) m_PieceType[Index++] = (int)EPieceType.None;
+            //// assign black pieces
+            //for (int i = 0; i < 32; i++) m_PieceType[Index++] = (int)EPieceType.None;
 
-            // assign black pieces
-            for (int i = 0; i < 8; i++) m_PieceType[Index++] = (int)EPieceType.B_Pawn;
-            m_PieceType[Index++] = (int)EPieceType.B_Rook;
-            m_PieceType[Index++] = (int)EPieceType.B_Knight;
-            m_PieceType[Index++] = (int)EPieceType.B_Bishop;
-            m_PieceType[Index++] = (int)EPieceType.B_Queen;
-            m_PieceType[Index++] = (int)EPieceType.B_King;
-            m_PieceType[Index++] = (int)EPieceType.B_Bishop;
-            m_PieceType[Index++] = (int)EPieceType.B_Knight;
-            m_PieceType[Index++] = (int)EPieceType.B_Rook;
+            //// assign black pieces
+            //for (int i = 0; i < 8; i++) m_PieceType[Index++] = (int)EPieceType.B_Pawn;
+            //m_PieceType[Index++] = (int)EPieceType.B_Rook;
+            //m_PieceType[Index++] = (int)EPieceType.B_Knight;
+            //m_PieceType[Index++] = (int)EPieceType.B_Bishop;
+            //m_PieceType[Index++] = (int)EPieceType.B_Queen;
+            //m_PieceType[Index++] = (int)EPieceType.B_King;
+            //m_PieceType[Index++] = (int)EPieceType.B_Bishop;
+            //m_PieceType[Index++] = (int)EPieceType.B_Knight;
+            //m_PieceType[Index++] = (int)EPieceType.B_Rook;
+
+            resetBoard();
 
             // update chess board images according to m_PieceType
             updateChessBoard();
@@ -133,15 +146,23 @@ namespace ChessGame
 
         private void updateChessBoard()
         {
+           
             // reset all 64 chess button images by starting from chess button starting index controls
             for (int i = 0; i < SQUARE_NUM; i++)
             {
+                // get chess board piece from ChessAPI
+                m_PieceType[i] = getPiece(i);
+
+                // update to control
                 (Controls[m_ChessButtonStartInd + i] as Button).Image = m_imgPiece[m_PieceType[i]];
             }
         }
 
         private void updateOnePiece(int Ind)
         {
+            // get chess board piece from ChessAPI
+            m_PieceType[Ind] = getPiece(Ind);
+
             (Controls[m_ChessButtonStartInd + Ind] as Button).Image = m_imgPiece[m_PieceType[Ind]];
         }
 
@@ -181,23 +202,52 @@ namespace ChessGame
             else
             {
                 chooseTargetPiece(ButtonInd);
+                updateGameState();
             }
         }
 
-        private void relocatePiece(int StartInd, int TargetInd)
+        private void updateGameState()
         {
-            if (StartInd == TargetInd) return;
+            string szState = "";
+            switch (m_GameState)
+            {
+                case 0: szState = "WhiteMove"; break;
+                case 1: szState = "WhitePromote"; break;
+                case 2: szState = "WhiteCheckmate"; break;
+                case 3: szState = "BlackMove"; break;
+                case 4: szState = "BlackPromote"; break;
+                case 5: szState = "BlackCheckmate"; break;
+                case 6: szState = "DrawByStalemate"; break;
+                case 7: szState = "DrawByFiftyMoveRule"; break;
+            }
+            Debug1.Text = szState;
+        }
 
-            m_PieceType[TargetInd] = m_PieceType[StartInd];
-            m_PieceType[StartInd] = (int)EPieceType.None;
+        private bool relocatePiece(int StartInd, int TargetInd)
+        {
+            if (StartInd == TargetInd) return false;
 
-            updateOnePiece(StartInd);
-            updateOnePiece(TargetInd);
+            if (moveOnePiece(StartInd, TargetInd) == true)
+            {
+                updateOnePiece(StartInd);
+                updateOnePiece(TargetInd);
+                m_GameState = getState();
+                return true;
+            }
+
+            m_GameState = getState();
+
+            return false;
         }
 
         private void ResetBoard_Click(object sender, EventArgs e)
         {
             resetChessBoard();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
